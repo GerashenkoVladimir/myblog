@@ -8,7 +8,6 @@ class Loader
     {
         if (is_dir($path)) {
             self::$classesMap[$namespace] = $path;
-
         } else {
             return false;
         }
@@ -16,9 +15,27 @@ class Loader
 
     public static function autoload($classname)
     {
-        $path = __DIR__.'/../'.lcfirst($classname).'.php';
-        if (file_exists($path)) {
-            require_once $path;
+        $parts = explode('\\', $classname);
+
+        foreach (self::$classesMap as $namespace => $dirPath) {
+            if ($namespace == $parts[0] . '\\') {
+                array_shift($parts);
+                $filePath = $dirPath . '/' . implode('/', $parts) . '.php';
+                if (file_exists($filePath)) {
+                    require_once $filePath;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        $filePath = __DIR__ . '/../' . lcfirst($classname) . '.php';
+        if (file_exists($filePath)) {
+            require_once $filePath;
+            return true;
+        } else {
+            return false;
         }
 
     }
@@ -26,5 +43,3 @@ class Loader
 }
 
 spl_autoload_register(array('Loader','autoload'));
-
-
