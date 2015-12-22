@@ -1,3 +1,5 @@
+<pre>
+
 <?php
 
 require_once(__DIR__.'/../framework/Loader.php');
@@ -8,3 +10,5 @@ $app = new \Framework\Application(__DIR__.'/../app/config/config.php');
 
 $app->run();
 
+?>
+    </pre>

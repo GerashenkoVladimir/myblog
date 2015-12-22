@@ -16,13 +16,11 @@ class Loader
 
     public static function autoload($classname)
     {
-        self::$classesMap = require_once(__DIR__.'/../app/config/classesmap.php');
-        foreach (self::$classesMap as $namespace => $path) {
-            if ($namespace == $classname) {
-                require_once $path;
-                break;
-            }
+        $path = __DIR__.'/../'.lcfirst($classname).'.php';
+        if (file_exists($path)) {
+            require_once $path;
         }
+
     }
 
 }
