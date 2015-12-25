@@ -1,18 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Владимир
- * Date: 22.12.2015
- * Time: 16:05
- */
+
 
 namespace Framework;
 
+use Framework\Router\Router;
 
 class Application
 {
     public function run()
     {
-        echo 'Hello world!!!';
+        Router::getRoute();
     }
 }

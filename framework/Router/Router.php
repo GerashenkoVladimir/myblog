@@ -1,14 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Vladimir
- * Date: 25.12.2015
- * Time: 16:21
- */
 
 namespace Framework\Router;
 
 class Router
 {
+    public static function getRoute()
+    {
+        $uri =  $_SERVER['REQUEST_URI'];
 
+        $routes = require_once(__DIR__.'/../../app/config/routes.php');
+        echo '<pre>';
+        foreach ($routes as $route) {
+            if ($route['pattern']==$uri) {
+                echo 'Pattern: '.$uri;
+            }
+        }
+        echo '</pre>';
+    }
 }
