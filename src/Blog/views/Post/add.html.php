@@ -3,13 +3,14 @@
 }
 
 $getValidationClass = function ($field) use ($errors) {
-    return isset($errors[$field])?'has-error has-feedback':'';
+    return isset($errors[$field]) ? 'has-error has-feedback' : '';
 };
 
-$getErrorBody = function ($field) use ($errors){
-  if (isset($errors[$field])){
-      return '<span class="glyphicon glyphicon-remove form-control-feedback"></span><span class="pull-right small form-error">'.$errors[$field].'</span>';
-  }
+$getErrorBody = function ($field) use ($errors) {
+    if (isset($errors[$field])) {
+        return '<span class="glyphicon glyphicon-remove form-control-feedback"></span><span class="pull-right small form-error">' . $errors[$field] . '</span>';
+    }
+
     return '';
 }
 
@@ -38,8 +39,9 @@ $getErrorBody = function ($field) use ($errors){
                 <label class="col-sm-2 control-label">Title</label>
 
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="title" placeholder="Title" value="<?php echo @$post->title ?>">
-                    <?php echo $getErrorBody('title')?>
+                    <input type="text" class="form-control" name="title" placeholder="Title"
+                           value="<?php echo @$post->title ?>">
+                    <?php echo $getErrorBody('title') ?>
                 </div>
             </div>
             <div class="form-group <?php echo $getValidationClass('content') ?>">
@@ -66,25 +68,35 @@ $getErrorBody = function ($field) use ($errors){
                         </div>
                         <div class="btn-group">
                             <a class="btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></a>
-                            <a class="btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></a>
-                            <a class="btn" data-edit="strikethrough" title="Strikethrough"><i class="icon-strikethrough"></i></a>
-                            <a class="btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></a>
+                            <a class="btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i
+                                    class="icon-italic"></i></a>
+                            <a class="btn" data-edit="strikethrough" title="Strikethrough"><i
+                                    class="icon-strikethrough"></i></a>
+                            <a class="btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i
+                                    class="icon-underline"></i></a>
                         </div>
                         <div class="btn-group">
-                            <a class="btn" data-edit="insertunorderedlist" title="Bullet list"><i class="icon-list-ul"></i></a>
-                            <a class="btn" data-edit="insertorderedlist" title="Number list"><i class="icon-list-ol"></i></a>
-                            <a class="btn" data-edit="outdent" title="Reduce indent (Shift+Tab)"><i class="icon-indent-left"></i></a>
+                            <a class="btn" data-edit="insertunorderedlist" title="Bullet list"><i
+                                    class="icon-list-ul"></i></a>
+                            <a class="btn" data-edit="insertorderedlist" title="Number list"><i
+                                    class="icon-list-ol"></i></a>
+                            <a class="btn" data-edit="outdent" title="Reduce indent (Shift+Tab)"><i
+                                    class="icon-indent-left"></i></a>
                             <a class="btn" data-edit="indent" title="Indent (Tab)"><i class="icon-indent-right"></i></a>
                         </div>
                         <div class="btn-group">
-                            <a class="btn" data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)"><i class="icon-align-left"></i></a>
-                            <a class="btn" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><i class="icon-align-center"></i></a>
+                            <a class="btn" data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)"><i
+                                    class="icon-align-left"></i></a>
+                            <a class="btn" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><i
+                                    class="icon-align-center"></i></a>
                             <a class="btn" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><i
                                     class="icon-align-right"></i></a>
-                            <a class="btn" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i class="icon-align-justify"></i></a>
+                            <a class="btn" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i
+                                    class="icon-align-justify"></i></a>
                         </div>
                         <div class="btn-group">
-                            <a class="btn dropdown-toggle" data-toggle="dropdown" title="Hyperlink"><i class="icon-link"></i></a>
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" title="Hyperlink"><i
+                                    class="icon-link"></i></a>
 
                             <div class="dropdown-menu input-append">
                                 <input class="span2" placeholder="URL" type="text" data-edit="createLink"/>
@@ -107,7 +119,7 @@ $getErrorBody = function ($field) use ($errors){
                     </div>
 
                     <input type="hidden" name="content" id="post-content" value="">
-                    <?php echo $getErrorBody('content')?>
+                    <?php echo $getErrorBody('content') ?>
                 </div>
             </div>
             <?php $generateToken() ?>

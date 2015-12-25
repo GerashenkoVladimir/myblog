@@ -23,6 +23,7 @@ class Loader
                 $filePath = $dirPath . '/' . implode('/', $parts) . '.php';
                 if (file_exists($filePath)) {
                     require_once $filePath;
+
                     return true;
                 } else {
                     return false;
@@ -33,6 +34,7 @@ class Loader
         $filePath = __DIR__ . '/../' . lcfirst($classname) . '.php';
         if (file_exists($filePath)) {
             require_once $filePath;
+
             return true;
         } else {
             return false;
@@ -42,4 +44,4 @@ class Loader
 
 }
 
-spl_autoload_register(array('Loader','autoload'));
+spl_autoload_register(array('Loader', 'autoload'));

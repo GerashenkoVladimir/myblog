@@ -26,13 +26,16 @@ body {
     padding: 15px;
     margin: 0 auto;
 }
+
 .form-signin .form-signin-heading,
 .form-signin .checkbox {
     margin-bottom: 10px;
 }
+
 .form-signin .checkbox {
     font-weight: normal;
 }
+
 .form-signin .form-control {
     position: relative;
     height: auto;
@@ -42,14 +45,17 @@ body {
     padding: 10px;
     font-size: 16px;
 }
+
 .form-signin .form-control:focus {
     z-index: 2;
 }
+
 .form-signin input[type="email"] {
     margin-bottom: -1px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
+
 .form-signin input[type="password"] {
     margin-bottom: 10px;
     border-top-left-radius: 0;
@@ -60,7 +66,6 @@ body {
     max-width: 90px;
 }
 
-
 textarea.form-control {
     resize: vertical;
 }
@@ -69,7 +74,10 @@ textarea.form-control {
     margin-right: 5px;
 }
 
-#editor {overflow:scroll; max-height:300px}
+#editor {
+    overflow: scroll;
+    max-height: 300px
+}
 
 #editor {
     max-height: 250px;
@@ -81,11 +89,14 @@ textarea.form-control {
     box-sizing: content-box;
     -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
     box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
-    border-top-right-radius: 3px; border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px; border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
     overflow: scroll;
     outline: none;
 }
+
 #voiceBtn {
     width: 20px;
     color: transparent;
@@ -114,6 +125,6 @@ div[data-role="editor-toolbar"] {
     color: red;
 }
 
-.has-error #editor{
+.has-error #editor {
     border-color: #a94442;
 }
