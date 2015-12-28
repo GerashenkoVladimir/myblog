@@ -67,5 +67,10 @@ return array(
             '_method' => 'POST'
         )
 
-    )
+    ),
+    'my_route'   => array(
+        'pattern'    => '/my_route',
+        'controller' => 'Blog\\Controller\\MyController',
+        'action'     => 'my',
+    ),
 );
