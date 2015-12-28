@@ -14,18 +14,20 @@ class Router
     {
         $uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 
-        $routes = require_once(__DIR__.'/../../app/config/routes.php');
+        $routes = require_once(__DIR__ . '/../../app/config/routes.php');
         echo '<pre>';
         foreach ($routes as $route) {
+
+
             if ($route['pattern'] == $uri) {
                 array_push(self::$matchedRoutes, $route);
             }
         }
 
-        //дописать "разбор" по методам GET & POST
+        //РґРѕРїРёСЃР°С‚СЊ "СЂР°Р·Р±РѕСЂ" РїРѕ РјРµС‚РѕРґР°Рј GET & POST
         if (self::$matchedRoutes != null) {
             self::$controller = self::$matchedRoutes[0]['controller'];
-            self::$action     = self::$matchedRoutes[0]['action'].'Action';
+            self::$action = self::$matchedRoutes[0]['action'] . 'Action';
 
             $controllerObj = new self::$controller();
             $controllerObj->{self::$action}();
@@ -34,5 +36,17 @@ class Router
         }
 
         echo '</pre>';
+    }
+
+    private function replaceParameters($route)
+    {
+        $routePattern = '';
+        $first = strpos($route['pattern'], '{');
+        $last = strpos($route['pattern'], '}');
+        if ($first !== false && $last !== false) {
+            $length = $last - $first + 1;
+            print_r(substr($route['pattern'], $first, $length));
+            echo '<br>';
+        }
     }
 }
