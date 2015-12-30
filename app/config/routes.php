@@ -72,5 +72,9 @@ return array(
         'pattern'    => '/my_route',
         'controller' => 'Blog\\Controller\\MyController',
         'action'     => 'my',
+        '_requirements' => array(
+            'id' => '\d+',
+            'name' => '\w+',
+        )
     ),
 );
