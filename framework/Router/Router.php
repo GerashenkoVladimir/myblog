@@ -29,7 +29,7 @@ class Router
         }
 
         self::$readyRoute = self::filterHTTPMethods($matchedRoutes);
-        self::$args = self::getArgs($uri);
+        self::$args       = self::getArgs($uri);
 
         if (self::$readyRoute != null) {
             self::$controller = self::$readyRoute['controller'];
@@ -48,6 +48,7 @@ class Router
                 $pattern = preg_replace('|'.$matches[0][$match].'|', '('.$route['_requirements'][$m].')', $pattern);
             }
         }
+
         return $pattern;
     }
 
@@ -56,6 +57,7 @@ class Router
         if (preg_match("|^".$pattern.'$|', $uri)) {
             return true;
         }
+
         return false;
     }
 
@@ -64,6 +66,7 @@ class Router
         $args = explode('/', $uri);
         array_shift($args);
         array_shift($args);
+
         return $args;
     }
 
@@ -73,10 +76,12 @@ class Router
             foreach ($matchedRoutes as $mR) {
                 if (isset($mR['_requirements']['_method']) && $_SERVER['REQUEST_METHOD'] == $mR['_requirements']['_method']) {
                     $filteredRoute = $mR;
+
                     return $filteredRoute;
                 }
             }
         }
+
         return $matchedRoutes[0];
     }
 
