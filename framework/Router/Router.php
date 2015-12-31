@@ -34,7 +34,8 @@ class Router
         if (self::$readyRoute != null) {
             self::$controller = self::$readyRoute['controller'];
             self::$action     = self::$readyRoute['action'].'Action';
-            call_user_func_array(array(new self::$controller, self::$action), self::$args);
+            self::createController(self::$controller, self::$action, self::$args);
+            //call_user_func_array(array(new self::$controller, self::$action), self::$args);
         } else {
             echo '404';
         }
@@ -72,17 +73,27 @@ class Router
 
     private static function filterHTTPMethods($matchedRoutes)
     {
-        if (count($matchedRoutes) > 0) {
+        if (count($matchedRoutes) > 1) {
             foreach ($matchedRoutes as $mR) {
                 if (isset($mR['_requirements']['_method']) && $_SERVER['REQUEST_METHOD'] == $mR['_requirements']['_method']) {
-                    $filteredRoute = $mR;
+                    $readyRoute = $mR;
 
-                    return $filteredRoute;
+                    return $readyRoute;
                 }
             }
+        } elseif ($matchedRoutes == null) {
+            return null;
         }
 
         return $matchedRoutes[0];
     }
 
+    private static function createController($controllerName, $action, $args)
+    {
+        if (method_exists($controllerName, $action)) {
+            call_user_func_array(array($controllerName, $action), $args);
+        } else {
+            echo 'Controller or method is not exists!';
+        }
+    }
 }
