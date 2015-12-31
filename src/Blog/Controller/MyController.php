@@ -1,18 +1,27 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Vladimir
- * Date: 28.12.2015
- * Time: 17:19
- */
 
 namespace Blog\Controller;
 
 class MyController
 {
-    public function myAction()
+    public function myAction($id, $name)
     {
-        echo 'My route!';
+        echo   "<form method='post' action='/my_route/$id/$name'>
+                    <input type='submit'>
+                </form>";
+    }
+
+    public function  postAction($id, $name)
+    {
+        echo "ID: $id";
+        echo "<br>";
+        echo "Имя: $name";
+
+    }
+
+    public function simpleAction()
+    {
+        echo 'Hello World!!!';
     }
 
 }

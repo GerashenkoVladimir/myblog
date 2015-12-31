@@ -68,13 +68,29 @@ return array(
         )
 
     ),
-    'my_route'   => array(
-        'pattern'    => '/my_route',
+    'my_route_args'   => array(
+        'pattern'    => '/my_route/{id}/{name}',
         'controller' => 'Blog\\Controller\\MyController',
         'action'     => 'my',
         '_requirements' => array(
             'id' => '\d+',
             'name' => '\w+',
         )
+    ),
+    'my_route_post'   => array(
+        'pattern'    => '/my_route/{id}/{name}',
+        'controller' => 'Blog\\Controller\\MyController',
+        'action'     => 'post',
+        '_requirements' => array(
+            '_method' => 'POST',
+            'id' => '\d+',
+            'name' => '\w+',
+        )
+    ),
+
+    'my_route'   => array(
+        'pattern'    => '/my_route',
+        'controller' => 'Blog\\Controller\\MyController',
+        'action'     => 'simple',
     ),
 );
