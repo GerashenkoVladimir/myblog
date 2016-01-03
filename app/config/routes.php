@@ -91,6 +91,6 @@ return array(
     'my_route'   => array(
         'pattern'    => '/my_route',
         'controller' => 'Blog\\Controller\\MyController',
-        'action'     => 'simple',
+        'action'     => 'simplee',
     ),
 );

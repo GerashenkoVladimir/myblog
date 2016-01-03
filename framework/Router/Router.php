@@ -2,7 +2,7 @@
 
 namespace Framework\Router;
 
-use Framework\Exceptions\FileNotFoundException;
+use Framework\Exceptions\RouterExceptions;
 
 class Router
 {
@@ -16,6 +16,7 @@ class Router
 
     public static function getRoute()
     {
+        echo '<pre>';
         $uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 
         $routes = require_once(__DIR__.'/../../app/config/routes.php');
@@ -30,22 +31,21 @@ class Router
             }
         }
 
-        self::$readyRoute = self::filterHTTPMethods($matchedRoutes);
-        self::$args       = self::getArgs($uri);
+        self::$args = self::getArgs($uri);
 
-        if (self::$readyRoute != null) {
+        try{
+            if ($matchedRoutes == null) {
+                throw new RouterExceptions(RouterExceptions::ERROR_404);
+            }
+            self::$readyRoute = self::filterHTTPMethods($matchedRoutes);
             self::$controller = self::$readyRoute['controller'];
             self::$action     = self::$readyRoute['action'].'Action';
-            try{
-                self::createController(self::$controller, self::$action, self::$args);
-            } catch (FileNotFoundException $e){
-                echo $e;
-            }
-
-            //call_user_func_array(array(new self::$controller, self::$action), self::$args);
-        } else {
-            echo '404';
+            self::createController(self::$controller, self::$action, self::$args);
+        } catch (RouterExceptions $e){
+            //Дописать страницу вывода ошибки
+            echo $e;
         }
+        echo '</pre>';
     }
 
     private static function preparePattern($route)
@@ -88,8 +88,6 @@ class Router
                     return $readyRoute;
                 }
             }
-        } elseif ($matchedRoutes == null) {
-            return null;
         }
 
         return $matchedRoutes[0];
@@ -98,13 +96,8 @@ class Router
     private static function createController($controllerName, $action, $args)
     {
         if (!method_exists($controllerName, $action)) {
-            throw new FileNotFoundException($controllerName);
+            throw new RouterExceptions(RouterExceptions::FILE_OR_ACTION_NOT_FOUND, array($controllerName, $action));
         }
         call_user_func_array(array($controllerName, $action), $args);
-        /*if (method_exists($controllerName, $action)) {
-            call_user_func_array(array($controllerName, $action), $args);
-        } else {
-            echo 'Controller or method is not exists!';
-        }*/
     }
 }
