@@ -2,6 +2,8 @@
 
 namespace Framework\Router;
 
+use Framework\Exceptions\FileNotFoundException;
+
 class Router
 {
     private static $readyRoute = array();
@@ -34,7 +36,12 @@ class Router
         if (self::$readyRoute != null) {
             self::$controller = self::$readyRoute['controller'];
             self::$action     = self::$readyRoute['action'].'Action';
-            self::createController(self::$controller, self::$action, self::$args);
+            try{
+                self::createController(self::$controller, self::$action, self::$args);
+            } catch (FileNotFoundException $e){
+                echo $e;
+            }
+
             //call_user_func_array(array(new self::$controller, self::$action), self::$args);
         } else {
             echo '404';
@@ -90,10 +97,14 @@ class Router
 
     private static function createController($controllerName, $action, $args)
     {
-        if (method_exists($controllerName, $action)) {
+        if (!method_exists($controllerName, $action)) {
+            throw new FileNotFoundException($controllerName);
+        }
+        call_user_func_array(array($controllerName, $action), $args);
+        /*if (method_exists($controllerName, $action)) {
             call_user_func_array(array($controllerName, $action), $args);
         } else {
             echo 'Controller or method is not exists!';
-        }
+        }*/
     }
 }
