@@ -16,7 +16,6 @@ class Router
 
     public static function getRoute()
     {
-        echo '<pre>';
         $uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 
         $routes = require_once(__DIR__.'/../../app/config/routes.php');
@@ -35,7 +34,7 @@ class Router
 
         try{
             if ($matchedRoutes == null) {
-                throw new RouterExceptions(RouterExceptions::ERROR_404);
+                throw new RouterExceptions("ERROR 404!!! Page not found!");
             }
             self::$readyRoute = self::filterHTTPMethods($matchedRoutes);
             self::$controller = self::$readyRoute['controller'];
@@ -45,7 +44,6 @@ class Router
             //Дописать страницу вывода ошибки
             echo $e;
         }
-        echo '</pre>';
     }
 
     private static function preparePattern($route)
@@ -96,7 +94,7 @@ class Router
     private static function createController($controllerName, $action, $args)
     {
         if (!method_exists($controllerName, $action)) {
-            throw new RouterExceptions(RouterExceptions::FILE_OR_ACTION_NOT_FOUND, array($controllerName, $action));
+            throw new RouterExceptions("Class \"".$controllerName."\" or action \"".$action."\" not exists!");
         }
         call_user_func_array(array($controllerName, $action), $args);
     }
