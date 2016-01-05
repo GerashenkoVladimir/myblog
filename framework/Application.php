@@ -9,6 +9,7 @@ class Application
 {
     public function run()
     {
-        Router::getRoute();
+        $router = new Router();
+        $router->getRoute();
     }
 }

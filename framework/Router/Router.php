@@ -2,19 +2,27 @@
 
 namespace Framework\Router;
 
-use Framework\Exceptions\RouterExceptions;
+use Framework\Exception\RouterExceptions;
+use Framework\Registry\Registry;
 
 class Router
 {
-    private static $readyRoute = array();
+    private $registry;
 
-    private static $controller;
+    private $readyRoute = array();
 
-    private static $action;
+    private $controller;
 
-    private static $args;
+    private $action;
 
-    public static function getRoute()
+    private $args;
+
+    public function __construct()
+    {
+        $this->registry = Registry::getInstance();
+    }
+
+    public function getRoute()
     {
         $uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 
@@ -23,30 +31,30 @@ class Router
         $matchedRoutes = array();
 
         foreach ($routes as $route) {
-            $pattern = self::preparePattern($route);
+            $pattern = $this->preparePattern($route);
 
-            if (self::compareRoute($pattern, $uri)) {
+            if ($this->compareRoute($pattern, $uri)) {
                 array_push($matchedRoutes, $route);
             }
         }
 
-        self::$args = self::getArgs($uri);
+        $this->args = $this->getArgs($uri);
 
         try{
             if ($matchedRoutes == null) {
                 throw new RouterExceptions("ERROR 404!!! Page not found!");
             }
-            self::$readyRoute = self::filterHTTPMethods($matchedRoutes);
-            self::$controller = self::$readyRoute['controller'];
-            self::$action     = self::$readyRoute['action'].'Action';
-            self::createController(self::$controller, self::$action, self::$args);
+            $this->readyRoute = $this->filterHTTPMethods($matchedRoutes);
+            $this->controller = $this->readyRoute['controller'];
+            $this->action     = $this->readyRoute['action'].'Action';
+            $this->createController($this->controller, $this->action, $this->args);
         } catch (RouterExceptions $e){
             //Дописать страницу вывода ошибки
             echo $e;
         }
     }
 
-    private static function preparePattern($route)
+    private function preparePattern($route)
     {
         $pattern = $route['pattern'];
         if (preg_match_all('|{(\w+)}|', $route['pattern'], $matches) != null) {
@@ -58,7 +66,7 @@ class Router
         return $pattern;
     }
 
-    private static function compareRoute($pattern, $uri)
+    private function compareRoute($pattern, $uri)
     {
         if (preg_match("|^".$pattern.'$|', $uri)) {
             return true;
@@ -67,7 +75,7 @@ class Router
         return false;
     }
 
-    private static function getArgs($uri)
+    private function getArgs($uri)
     {
         $args = explode('/', $uri);
         array_shift($args);
@@ -76,7 +84,7 @@ class Router
         return $args;
     }
 
-    private static function filterHTTPMethods($matchedRoutes)
+    private function filterHTTPMethods($matchedRoutes)
     {
         if (count($matchedRoutes) > 1) {
             foreach ($matchedRoutes as $mR) {
@@ -91,11 +99,20 @@ class Router
         return $matchedRoutes[0];
     }
 
-    private static function createController($controllerName, $action, $args)
+    private function createController($controllerName, $action, $args)
     {
         if (!method_exists($controllerName, $action)) {
             throw new RouterExceptions("Class \"$controllerName\" or action \"$action\" not exists!");
         }
-        call_user_func_array(array($controllerName, $action), $args);
+        $controllerObj = new $controllerName($this->registry);
+        call_user_func_array(array($controllerObj, $action), $args);
+    }
+
+    private function __clone()
+    {
+    }
+
+    private function __wakeup()
+    {
     }
 }

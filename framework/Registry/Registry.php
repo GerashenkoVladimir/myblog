@@ -2,11 +2,26 @@
 
 namespace Framework\Registry;
 
-use Framework\Exceptions\RegistryExceptions;
+use Framework\Exception\RegistryExceptions;
 
 class Registry implements \ArrayAccess
 {
     private $vars = array();
+
+    private static $_instance;
+
+    public static function getInstance()
+    {
+        if (null === self::$_instance) {
+            self::$_instance = new self;
+        }
+
+        return self::$_instance;
+    }
+
+    private function __construct()
+    {
+    }
 
     private function set($key, $var)
     {

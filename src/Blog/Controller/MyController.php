@@ -2,7 +2,9 @@
 
 namespace Blog\Controller;
 
-class MyController
+use Framework\Controller\Controller;
+
+class MyController extends Controller
 {
     public function myAction($id, $name)
     {
@@ -21,7 +23,10 @@ class MyController
 
     public function simpleAction()
     {
-        echo 'Hello World!!!';
+        $this->registry['hello'] = 'Hello world!!!';
+
+        echo $this->registry['hello'];
+
     }
 
 }
