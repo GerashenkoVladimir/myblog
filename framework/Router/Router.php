@@ -94,7 +94,7 @@ class Router
     private static function createController($controllerName, $action, $args)
     {
         if (!method_exists($controllerName, $action)) {
-            throw new RouterExceptions("Class \"".$controllerName."\" or action \"".$action."\" not exists!");
+            throw new RouterExceptions("Class \"$controllerName\" or action \"$action\" not exists!");
         }
         call_user_func_array(array($controllerName, $action), $args);
     }
