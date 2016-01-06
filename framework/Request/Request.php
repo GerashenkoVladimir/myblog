@@ -8,19 +8,22 @@ class Request
 {
     private $registry;
 
+    private $allHeaders = array();
+
     private $uri;
 
     private $requestMethod;
 
-    private $getData;
+    private $getData = array();
 
-    private $postData;
+    private $postData = array();
 
-    private $sessionData;
+    private $sessionData = array();
 
     public function __construct()
     {
         $this->registry      = Registry::getInstance();
+        $this->allHeaders    = getallheaders();
         session_start();
         $this->uri           = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
         $this->requestMethod = $_SERVER['REQUEST_METHOD'];
@@ -28,6 +31,11 @@ class Request
         //добавить валидацию
         $this->getData       = $_GET;
         $this->postData      = $_POST;
+    }
+
+    public function getHeaders()
+    {
+        return $this->allHeaders;
     }
 
     public function getRequestMethod()

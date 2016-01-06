@@ -22,7 +22,7 @@ class Registry implements \ArrayAccess
 
     private function __construct()
     {
-        //$this['request'] = new Request();
+
     }
 
     private function set($key, $var)
