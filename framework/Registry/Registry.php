@@ -69,4 +69,12 @@ class Registry implements \ArrayAccess
     {
         $this->remove($offset);
     }
+
+    private function __clone()
+    {
+    }
+
+    private function __wakeup()
+    {
+    }
 }

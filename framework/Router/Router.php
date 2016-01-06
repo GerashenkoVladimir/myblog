@@ -24,7 +24,7 @@ class Router
 
     public function getRoute()
     {
-        $uri = urldecode(parse_url($this->registry['request']->getUri(), PHP_URL_PATH));
+        $uri = $this->registry['request']->getUri();
 
         $routes = require_once(__DIR__.'/../../app/config/routes.php');
 
@@ -109,13 +109,5 @@ class Router
         }
         $controllerObj = new $controllerName($this->registry);
         call_user_func_array(array($controllerObj, $action), $args);
-    }
-
-    private function __clone()
-    {
-    }
-
-    private function __wakeup()
-    {
     }
 }
