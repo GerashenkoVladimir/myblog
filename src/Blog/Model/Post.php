@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dgilan
- * Date: 10/16/14
- * Time: 11:36 AM
- */
 
 namespace Blog\Model;
 

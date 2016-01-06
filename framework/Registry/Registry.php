@@ -3,6 +3,7 @@
 namespace Framework\Registry;
 
 use Framework\Exception\RegistryExceptions;
+use Framework\Request\Request;
 
 class Registry implements \ArrayAccess
 {
@@ -21,6 +22,7 @@ class Registry implements \ArrayAccess
 
     private function __construct()
     {
+        $this['request'] = new Request();
     }
 
     private function set($key, $var)

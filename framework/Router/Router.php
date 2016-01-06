@@ -24,7 +24,7 @@ class Router
 
     public function getRoute()
     {
-        $uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+        $uri = urldecode(parse_url($this->registry['request']->getUri(), PHP_URL_PATH));
 
         $routes = require_once(__DIR__.'/../../app/config/routes.php');
 
@@ -88,7 +88,10 @@ class Router
     {
         if (count($matchedRoutes) > 1) {
             foreach ($matchedRoutes as $mR) {
-                if (isset($mR['_requirements']['_method']) && $_SERVER['REQUEST_METHOD'] == $mR['_requirements']['_method']) {
+                if (isset($mR['_requirements']['_method']) &&
+                    $this->registry['request']->getRequestMethod() == $mR['_requirements']['_method']
+                ) {
+
                     $readyRoute = $mR;
 
                     return $readyRoute;
