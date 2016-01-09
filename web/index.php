@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Application entry point.
+ */
 require_once(__DIR__ . '/../framework/Loader.php');
 
 Loader::addNamespacePath('Blog\\', __DIR__ . '/../src/Blog');

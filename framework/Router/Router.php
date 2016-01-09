@@ -5,16 +5,46 @@ namespace Framework\Router;
 use Framework\Exception\RouterExceptions;
 use Framework\Registry\Registry;
 
+/**
+ * Class Router
+ * Parses the request URI, determines which need to use the controller and action and create object of Controller class.
+ * @package Framework\Router
+ */
 class Router
 {
+    /**
+     * Object of Registry class
+     * @access private
+     * @var Registry
+     */
     private $registry;
 
+    /**
+     * An associative array that contains the parameters of route that matches to the request URI.
+     * @access private
+     * @var array
+     */
     private $readyRoute = array();
 
+    /**
+     * Controller name
+     * @access private
+     * @var string
+     */
     private $controller;
 
+    /**
+     * Controller action
+     * @access private
+     * @var string
+     */
     private $action;
 
+    /**
+     * Array of arguments for controller's action
+     * @access private
+     * @var array
+     */
     private $args;
 
     public function __construct()
@@ -22,6 +52,12 @@ class Router
         $this->registry = Registry::getInstance();
     }
 
+    /**
+     * Parses the request URI, determines which need to use the controller and action and create object
+     *                          of Controller class.
+     * @access public
+     * @return void
+     */
     public function getRoute()
     {
         $uri = $this->registry['request']->getUri();
@@ -54,6 +90,11 @@ class Router
         }
     }
 
+    /**
+     * Parses pattern from route array and converts it to a regular expression
+     * @param string $route
+     * @return string Regular expression
+     */
     private function preparePattern($route)
     {
         $pattern = $route['pattern'];
@@ -66,6 +107,12 @@ class Router
         return $pattern;
     }
 
+    /**
+     * Compare pattern (regular expression) with request URI.
+     * @param string $pattern Regular expression
+     * @param string $uri Request URI
+     * @return bool Returns true if pattern matches with request URI, else - returns false
+     */
     private function compareRoute($pattern, $uri)
     {
         if (preg_match("|^".$pattern.'$|', $uri)) {
@@ -75,6 +122,12 @@ class Router
         return false;
     }
 
+    /**
+     * Generates arguments from request URI.
+     * @access private
+     * @param string $uri
+     * @return array
+     */
     private function getArgs($uri)
     {
         $args = explode('/', $uri);
@@ -84,6 +137,12 @@ class Router
         return $args;
     }
 
+    /**
+     * Filter routes that match request method.
+     * @access private
+     * @param array $matchedRoutes
+     * @return array
+     */
     private function filterHTTPMethods($matchedRoutes)
     {
         if (count($matchedRoutes) > 1) {
@@ -102,6 +161,15 @@ class Router
         return $matchedRoutes[0];
     }
 
+    /**
+     * Creates object of controller and launches action.
+     * @access private
+     * @param string $controllerName
+     * @param string $action
+     * @param array $args
+     * @return void
+     * @throws RouterExceptions
+     */
     private function createController($controllerName, $action, $args)
     {
         if (!method_exists($controllerName, $action)) {

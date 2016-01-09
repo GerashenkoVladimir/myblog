@@ -1,9 +1,26 @@
 <?php
 
+
+/**
+ * Class Loader
+ * Automatically loads used classes.
+ */
 class Loader
 {
+    /**
+     * An associative array that contains the namespaces and file paths.
+     * @access private
+     * @var array Contains information about the $namespace => $path
+     */
     private static $classesMap = array();
 
+    /**
+     * Add custom namespace and file paths
+     * @access public
+     * @param string $namespace
+     * @param  string $path
+     * @return bool Returns false if $path is not directory.
+     */
     public static function addNamespacePath($namespace, $path)
     {
         if (is_dir($path)) {
@@ -13,6 +30,12 @@ class Loader
         }
     }
 
+    /**
+     * Automatically loads used classes.
+     * @access public
+     * @param string $classname
+     * @return bool
+     */
     public static function autoload($classname)
     {
         $parts = explode('\\', $classname);
