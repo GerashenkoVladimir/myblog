@@ -62,7 +62,7 @@ class Router
     {
         $uri = $this->registry['request']->getUri();
 
-        $routes = require_once(__DIR__.'/../../app/config/routes.php');
+        $routes = $this->registry['config']['routes'];
 
         $matchedRoutes = array();
 

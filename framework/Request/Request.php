@@ -33,11 +33,18 @@ class Request
     private $uri;
 
     /**
-     * Method of http request/
+     * Method of http request.
      * @access private
      * @var string
      */
     private $requestMethod;
+
+    /**
+     * Server protocol.
+     * @access private
+     * @var string
+     */
+    private $serverProtocol;
 
     /**
      * An associative array that contains the $_GET array.
@@ -62,15 +69,16 @@ class Request
 
     public function __construct()
     {
-        $this->registry      = Registry::getInstance();
-        $this->allHeaders    = getallheaders();
+        $this->registry       = Registry::getInstance();
+        $this->allHeaders     = getallheaders();
         session_start();
-        $this->uri           = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-        $this->requestMethod = $_SERVER['REQUEST_METHOD'];
-        $this->sessionData   = $_SESSION;
+        $this->uri            = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+        $this->requestMethod  = $_SERVER['REQUEST_METHOD'];
+        $this->serverProtocol = $_SERVER['SERVER_PROTOCOL'];
+        $this->sessionData    = $_SESSION;
         //добавить валидацию
-        $this->getData       = $_GET;
-        $this->postData      = $_POST;
+        $this->getData        = $_GET;
+        $this->postData       = $_POST;
     }
 
     /**
@@ -91,6 +99,16 @@ class Request
     public function getRequestMethod()
     {
         return $this->requestMethod;
+    }
+
+    /**
+     * Returns server protocol.
+     * @access public
+     * @return string
+     */
+    public function getServerProtocol()
+    {
+        return $this->serverProtocol;
     }
 
     /**
