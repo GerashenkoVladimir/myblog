@@ -8,12 +8,14 @@ use Framework\Request\Request;
 /**
  * Class Registry
  * Contains objects and variables. Implements ArrayAccess interface.
+ *
  * @package Framework\Registry
  */
 class Registry implements \ArrayAccess
 {
     /**
      * An associative array that contains objects and variables.
+     *
      * @access private
      * @var array Contains objects or variables $key => $var
      */
@@ -21,6 +23,7 @@ class Registry implements \ArrayAccess
 
     /**
      * Object variable of the Registry class
+     *
      * @access private
      * @var Registry
      */
@@ -28,6 +31,7 @@ class Registry implements \ArrayAccess
 
     /**
      * Implements pattern Singlton. Create and return object variable of Registry class.
+     *
      * @access public
      * @return Registry
      */
@@ -42,9 +46,12 @@ class Registry implements \ArrayAccess
 
     /**
      * Add data to the registry.
+     *
      * @access private
+     *
      * @param string $key Key of param
-     * @param mixed $var Param
+     * @param mixed  $var Param
+     *
      * @return bool Returns true if the value is set.
      * @throws RegistryExceptions
      */
@@ -61,8 +68,11 @@ class Registry implements \ArrayAccess
 
     /**
      * Returns element from registry.
+     *
      * @acces private
+     *
      * @param string $key Key of element.
+     *
      * @return bool Returns false if the element does not exists.
      */
     private function get($key)
@@ -76,8 +86,11 @@ class Registry implements \ArrayAccess
 
     /**
      * Remove param form registry.
+     *
      * @access private
+     *
      * @param string $key Key of param.
+     *
      * @return void
      */
     private function remove($key)
@@ -87,8 +100,11 @@ class Registry implements \ArrayAccess
 
     /**
      * Implements ArrayAccess interface. Checks element is set.
+     *
      * @access public
+     *
      * @param mixed $offset Key of element.
+     *
      * @return bool
      */
     public function offsetExists($offset)
@@ -98,8 +114,11 @@ class Registry implements \ArrayAccess
 
     /**
      * Implements ArrayAccess interface. Returns element.
+     *
      * @access public
+     *
      * @param string $offset Key of element.
+     *
      * @return mixed|bool
      */
     public function offsetGet($offset)
@@ -109,9 +128,12 @@ class Registry implements \ArrayAccess
 
     /**
      * Implements ArrayAccess interface. Set element.
+     *
      * @access public
+     *
      * @param string $offset Key of element.
-     * @param mixed $value Element.
+     * @param mixed  $value  Element.
+     *
      * @return void
      * @throws RegistryExceptions
      */
@@ -122,8 +144,11 @@ class Registry implements \ArrayAccess
 
     /**
      * Implements ArrayAccess interface. Remove element.
+     *
      * @access public
+     *
      * @param mixed $offset Key of element.
+     *
      * @return void
      */
     public function offsetUnset($offset)

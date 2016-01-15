@@ -7,12 +7,14 @@ use Framework\Registry\Registry;
 /**
  * Class Request
  * Implements work with request.
+ *
  * @package Framework\Request
  */
 class Request
 {
     /**
      * Object of Registry class
+     *
      * @access private
      * @var Registry
      */
@@ -20,6 +22,7 @@ class Request
 
     /**
      * An associative array that contains the headers of http request.
+     *
      * @access private
      * @var array
      */
@@ -27,6 +30,7 @@ class Request
 
     /**
      * Request URI.
+     *
      * @access private
      * @var string
      */
@@ -34,6 +38,7 @@ class Request
 
     /**
      * Method of http request.
+     *
      * @access private
      * @var string
      */
@@ -41,6 +46,7 @@ class Request
 
     /**
      * Server protocol.
+     *
      * @access private
      * @var string
      */
@@ -48,6 +54,7 @@ class Request
 
     /**
      * An associative array that contains the $_GET array.
+     *
      * @access private
      * @var array
      */
@@ -55,6 +62,7 @@ class Request
 
     /**
      * An associative array that contains the $_POST array.
+     *
      * @access private
      * @var array
      */
@@ -62,6 +70,7 @@ class Request
 
     /**
      * An associative array that contains the $_SESSION array.
+     *
      * @access private
      * @var array
      */
@@ -69,20 +78,21 @@ class Request
 
     public function __construct()
     {
-        $this->registry       = Registry::getInstance();
-        $this->allHeaders     = getallheaders();
+        $this->registry   = Registry::getInstance();
+        $this->allHeaders = getallheaders();
         session_start();
         $this->uri            = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
         $this->requestMethod  = $_SERVER['REQUEST_METHOD'];
         $this->serverProtocol = $_SERVER['SERVER_PROTOCOL'];
         $this->sessionData    = $_SESSION;
         //добавить валидацию
-        $this->getData        = $_GET;
-        $this->postData       = $_POST;
+        $this->getData  = $_GET;
+        $this->postData = $_POST;
     }
 
     /**
      * Returns headers of http request.
+     *
      * @access public
      * @return array
      */
@@ -93,6 +103,7 @@ class Request
 
     /**
      * Returns method of http request.
+     *
      * @access public
      * @return string
      */
@@ -103,6 +114,7 @@ class Request
 
     /**
      * Returns server protocol.
+     *
      * @access public
      * @return string
      */
@@ -113,6 +125,7 @@ class Request
 
     /**
      * Returns data of $_GET array.
+     *
      * @access public
      * @return array
      */
@@ -123,6 +136,7 @@ class Request
 
     /**
      * Returns data of $_POST array.
+     *
      * @access public
      * @return array
      */
@@ -133,6 +147,7 @@ class Request
 
     /**
      * Returns request URI.
+     *
      * @access public
      * @return string
      */
@@ -143,6 +158,7 @@ class Request
 
     /**
      * Returns data of $_SESSION array.
+     *
      * @access public
      * @return array
      */
@@ -153,17 +169,20 @@ class Request
 
     /**
      * Returns an element of one of the arrays ($_GET, $_POST, $_SESSION and http request headers)
+     *
      * @param string $arrayName
      * @param string $element
+     *
      * @return mixed|bool Returns false if element does not exists
      */
     public function getElement($arrayName, $element)
     {
-        $action = 'get'.ucfirst($arrayName).'Data';
+        $action    = 'get'.ucfirst($arrayName).'Data';
         $dataArray = $this->$action();
         if (isset($dataArray[$element])) {
             return $dataArray[$element];
         }
+
         return false;
     }
 }

@@ -1,0 +1,14 @@
+DefaultLanguage ru
+AddDefaultCharset utf-8
+php_value default_charset "utf-8"
+
+#DirectoryIndex symfony/web/app_dev.php
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule .* index.php [L]
+
+#RewriteRule ^(.*)$ index.php?route=$1 [L,QSA]
+php_flag display_errors 1

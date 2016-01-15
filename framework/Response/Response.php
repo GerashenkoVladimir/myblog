@@ -2,7 +2,6 @@
 
 namespace Framework\Response;
 
-
 use Framework\Registry\Registry;
 
 class Response
@@ -14,11 +13,10 @@ class Response
 
     public function __construct($headers = array(), $statusCode = 200, $content)
     {
-        $this->registry = Registry::getInstance();
-        $this->headers = $headers;
+        $this->registry   = Registry::getInstance();
+        $this->headers    = $headers;
         $this->statusCode = $statusCode;
-        $this->content = $content;
-
+        $this->content    = $content;
     }
 
     /**
@@ -26,7 +24,7 @@ class Response
      */
     public function setHeaders($header)
     {
-        array_push($this->headers,$header);
+        array_push($this->headers, $header);
     }
 
     /**
