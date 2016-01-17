@@ -23,13 +23,21 @@ class Application
 
         echo '<pre>';
         $dataBase = DataBase::getInstance();
-        $data = array(
+        $compareData = array(
             'firstName' => 'Sergey',
             'lastName' => 'Gerashenko',
         );
         $table = 'test';
 
-        $dataBase->insert($table, $data);
+        /*$dataBase->update($table, array('firstName' => 'Lidiya', 'lastName' => 'Gucenko'),array('id' => 11,
+                                                                                                     'firstName' => 'Grigoriy',
+                                                                                                     'lastName'  => 'Gerashenko'));*/
+        //var_dump($dataBase->select('test', array('id', 'firstName'), array('lastName' => 'Gerashenko'), 'id'));
+
+        $dataBase->delete($table, array('firstName' => 'Vladimir', 'lastName' => 'Gerashenko'));
+        var_dump($dataBase->selectAll($table, 'id'));
+
+
 
         echo '</pre>';
     }
