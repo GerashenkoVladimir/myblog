@@ -1,7 +1,7 @@
 <?php
 namespace Framework\Exception;
 
-class RouterExceptions extends \Exception
+class RouterException extends \Exception
 {
 
 }

@@ -2,7 +2,7 @@
 
 namespace Framework\Router;
 
-use Framework\Exception\RouterExceptions;
+use Framework\Exception\RouterException;
 use Framework\Registry\Registry;
 
 /**
@@ -63,7 +63,7 @@ class Router
      *                          of Controller class.
      *
      * @access public
-     * @throws RouterExceptions
+     * @throws RouterException
      * @return void
      */
     public function getRoute()
@@ -86,13 +86,13 @@ class Router
 
         try{
             if ($matchedRoutes == null) {
-                throw new RouterExceptions("ERROR 404!!! Page not found!");
+                throw new RouterException("ERROR 404!!! Page not found!");
             }
             $this->readyRoute = $this->filterHTTPMethods($matchedRoutes);
             $this->controller = $this->readyRoute['controller'];
             $this->action     = $this->readyRoute['action'].'Action';
             $this->createController($this->controller, $this->action, $this->args);
-        } catch (RouterExceptions $e){
+        } catch (RouterException $e){
             //Дописать страницу вывода ошибки
             echo $e;
         }
@@ -188,13 +188,13 @@ class Router
      * @param string $action
      * @param array  $args
      *
-     * @throws RouterExceptions
+     * @throws RouterException
      * @return void
      */
     private function createController($controllerName, $action, $args)
     {
         if (!method_exists($controllerName, $action)) {
-            throw new RouterExceptions("Class \"$controllerName\" or action \"$action\" not exists!");
+            throw new RouterException("Class \"$controllerName\" or action \"$action\" not exists!");
         }
         $controllerObj = new $controllerName($this->registry);
         call_user_func_array(array($controllerObj, $action), $args);
