@@ -68,27 +68,26 @@ return array(
         )
 
     ),
-    'my_route_args'   => array(
-        'pattern'    => '/my_route/{id}/{name}',
-        'controller' => 'Blog\\Controller\\MyController',
-        'action'     => 'my',
+    'my_route_args'  => array(
+        'pattern'       => '/my_route/{id}/{name}',
+        'controller'    => 'Blog\\Controller\\MyController',
+        'action'        => 'my',
         '_requirements' => array(
-            'id' => '\d+',
+            'id'   => '\d+',
             'name' => '\w+',
         )
     ),
-    'my_route_post'   => array(
-        'pattern'    => '/my_route/{id}/{name}',
-        'controller' => 'Blog\\Controller\\MyController',
-        'action'     => 'post',
+    'my_route_post'  => array(
+        'pattern'       => '/my_route/{id}/{name}',
+        'controller'    => 'Blog\\Controller\\MyController',
+        'action'        => 'post',
         '_requirements' => array(
             '_method' => 'POST',
-            'id' => '\d+',
-            'name' => '\w+',
+            'id'      => '\d+',
+            'name'    => '\w+',
         )
     ),
-
-    'my_route'   => array(
+    'my_route'       => array(
         'pattern'    => '/my_route',
         'controller' => 'Blog\\Controller\\MyController',
         'action'     => 'simple',

@@ -9,6 +9,7 @@ class Loader
 {
     /**
      * An associative array that contains the namespaces and file paths.
+     *
      * @access private
      * @var array Contains information about the $namespace => $path
      */
@@ -16,9 +17,12 @@ class Loader
 
     /**
      * Add custom namespace and file paths
+     *
      * @access public
-     * @param string $namespace
+     *
+     * @param string  $namespace
      * @param  string $path
+     *
      * @return bool Returns false if $path is not directory.
      */
     public static function addNamespacePath($namespace, $path)
@@ -32,8 +36,11 @@ class Loader
 
     /**
      * Automatically loads used classes.
+     *
      * @access public
+     *
      * @param string $classname
+     *
      * @return bool
      */
     public static function autoload($classname)
@@ -41,9 +48,9 @@ class Loader
         $parts = explode('\\', $classname);
 
         foreach (self::$classesMap as $namespace => $dirPath) {
-            if ($namespace == $parts[0] . '\\') {
+            if ($namespace == $parts[0].'\\') {
                 array_shift($parts);
-                $filePath = $dirPath . '/' . implode('/', $parts) . '.php';
+                $filePath = $dirPath.'/'.implode('/', $parts).'.php';
                 if (file_exists($filePath)) {
                     require_once $filePath;
 
@@ -54,7 +61,7 @@ class Loader
             }
         }
 
-        $filePath = __DIR__ . '/../' . lcfirst($classname) . '.php';
+        $filePath = __DIR__.'/../'.lcfirst($classname).'.php';
         if (file_exists($filePath)) {
             require_once $filePath;
 
@@ -62,7 +69,6 @@ class Loader
         } else {
             return false;
         }
-
     }
 
 }

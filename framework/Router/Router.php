@@ -8,12 +8,14 @@ use Framework\Registry\Registry;
 /**
  * Class Router
  * Parses the request URI, determines which need to use the controller and action and create object of Controller class.
+ *
  * @package Framework\Router
  */
 class Router
 {
     /**
      * Object of Registry class
+     *
      * @access private
      * @var Registry
      */
@@ -21,6 +23,7 @@ class Router
 
     /**
      * An associative array that contains the parameters of route that matches to the request URI.
+     *
      * @access private
      * @var array
      */
@@ -28,6 +31,7 @@ class Router
 
     /**
      * Controller name
+     *
      * @access private
      * @var string
      */
@@ -35,6 +39,7 @@ class Router
 
     /**
      * Controller action
+     *
      * @access private
      * @var string
      */
@@ -42,6 +47,7 @@ class Router
 
     /**
      * Array of arguments for controller's action
+     *
      * @access private
      * @var array
      */
@@ -55,7 +61,9 @@ class Router
     /**
      * Parses the request URI, determines which need to use the controller and action and create object
      *                          of Controller class.
+     *
      * @access public
+     * @throws RouterExceptions
      * @return void
      */
     public function getRoute()
@@ -92,7 +100,9 @@ class Router
 
     /**
      * Parses pattern from route array and converts it to a regular expression
+     *
      * @param string $route
+     *
      * @return string Regular expression
      */
     private function preparePattern($route)
@@ -109,8 +119,10 @@ class Router
 
     /**
      * Compare pattern (regular expression) with request URI.
+     *
      * @param string $pattern Regular expression
-     * @param string $uri Request URI
+     * @param string $uri     Request URI
+     *
      * @return bool Returns true if pattern matches with request URI, else - returns false
      */
     private function compareRoute($pattern, $uri)
@@ -124,8 +136,11 @@ class Router
 
     /**
      * Generates arguments from request URI.
+     *
      * @access private
+     *
      * @param string $uri
+     *
      * @return array
      */
     private function getArgs($uri)
@@ -139,8 +154,11 @@ class Router
 
     /**
      * Filter routes that match request method.
+     *
      * @access private
+     *
      * @param array $matchedRoutes
+     *
      * @return array
      */
     private function filterHTTPMethods($matchedRoutes)
@@ -163,12 +181,15 @@ class Router
 
     /**
      * Creates object of controller and launches action.
+     *
      * @access private
+     *
      * @param string $controllerName
      * @param string $action
-     * @param array $args
-     * @return void
+     * @param array  $args
+     *
      * @throws RouterExceptions
+     * @return void
      */
     private function createController($controllerName, $action, $args)
     {

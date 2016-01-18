@@ -1,9 +1,8 @@
 <?php
-
 namespace Framework\Registry;
 
 use Framework\Exception\RegistryExceptions;
-use Framework\Request\Request;
+use Framework\Inheritance\Singleton;
 
 /**
  * Class Registry
@@ -11,7 +10,7 @@ use Framework\Request\Request;
  *
  * @package Framework\Registry
  */
-class Registry implements \ArrayAccess
+class Registry extends Singleton implements \ArrayAccess
 {
     /**
      * An associative array that contains objects and variables.
@@ -21,27 +20,8 @@ class Registry implements \ArrayAccess
      */
     private $vars = array();
 
-    /**
-     * Object variable of the Registry class
-     *
-     * @access private
-     * @var Registry
-     */
-    private static $_instance;
-
-    /**
-     * Implements pattern Singlton. Create and return object variable of Registry class.
-     *
-     * @access public
-     * @return Registry
-     */
-    public static function getInstance()
+    protected function __construct()
     {
-        if (null === self::$_instance) {
-            self::$_instance = new self;
-        }
-
-        return self::$_instance;
     }
 
     /**
@@ -154,19 +134,5 @@ class Registry implements \ArrayAccess
     public function offsetUnset($offset)
     {
         $this->remove($offset);
-    }
-
-    /**
-     *
-     */
-    private function __clone()
-    {
-    }
-
-    /**
-     *
-     */
-    private function __wakeup()
-    {
     }
 }
