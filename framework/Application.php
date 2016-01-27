@@ -1,6 +1,7 @@
 <?php
 namespace Framework;
 
+use Framework\DataBase\DataBase;
 use Framework\Exception\DataBaseException;
 use Framework\Exception\RouterException;
 use Framework\Registry\Registry;
@@ -13,9 +14,11 @@ class Application
 
     public function run()
     {
-        $registry            = Registry::getInstance();
-        $registry['request'] = new Request();
-        $registry['config']  = require_once('../app/config/config.php');
+        echo '<pre>';
+        $registry             = Registry::getInstance();
+        $registry['request']  = new Request();
+        $registry['config']   = require_once('../app/config/config.php');
+        $registry['dataBase'] = DataBase::getInstance();
 
         $router = new Router();
 
@@ -28,7 +31,7 @@ class Application
         } catch (\Exception $e){
             echo$e;
         }
-        echo '<pre>';
+
 
         echo '</pre>';
     }
