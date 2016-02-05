@@ -16,9 +16,7 @@ class PostController extends Controller
 
     public function indexAction()
     {
-        //return $this->render('index.html', array('posts' => Post::find('all')));
-        var_dump($p = Post::find(4));
-        var_dump($p[0]->content);
+        return $this->render('index.html', array('posts' => Post::find('all')));
     }
 
     public function getPostAction($id)

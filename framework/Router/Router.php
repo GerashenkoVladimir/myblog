@@ -21,6 +21,8 @@ class Router
      */
     private $registry;
 
+    private $routes;
+
     /**
      * An associative array that contains the parameters of route that matches to the request URI.
      *
@@ -56,6 +58,17 @@ class Router
     public function __construct()
     {
         $this->registry = Registry::getInstance();
+        $this->routes   = $this->registry['config']['routes'];
+    }
+
+    public function generateURL($routeName)
+    {
+        if (isset($this->registry['config']['routes'][$routeName]['pattern'])) {
+            return "http://{$this->registry['request']->getHTTPHost()}{$this->registry['config']['routes'][$routeName]['pattern']}";
+        } else {
+            return '';
+        }
+
     }
 
     /**
@@ -70,11 +83,11 @@ class Router
     {
         $uri = $this->registry['request']->getUri();
 
-        $routes = $this->registry['config']['routes'];
+        $this->routes = $this->registry['config']['routes'];
 
         $matchedRoutes = array();
 
-        foreach ($routes as $route) {
+        foreach ($this->routes as $route) {
             $pattern = $this->preparePattern($route);
 
             if ($this->compareRoute($pattern, $uri)) {
@@ -196,7 +209,7 @@ class Router
         if (!method_exists($controllerName, $action)) {
             throw new RouterException("Class \"$controllerName\" or action \"$action\" not exists!");
         }
-        $controllerObj = new $controllerName($this->registry);
+        $controllerObj = new $controllerName();
         call_user_func_array(array($controllerObj, $action), $args);
     }
 }

@@ -19,8 +19,7 @@ class Application
         $registry['request']  = new Request();
         $registry['config']   = require_once('../app/config/config.php');
         $registry['dataBase'] = DataBase::getInstance();
-
-        $router = new Router();
+        $registry['router']   = $router = new Router();
 
         try{
             $router->getRoute();

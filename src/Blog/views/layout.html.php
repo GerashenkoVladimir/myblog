@@ -45,15 +45,15 @@ $activeIfRoute = function ($item) use (&$route) {
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <?php if (is_null($user)) { ?>
+                <?php //if (is_null($user)) { ?>
                     <li <?php echo $activeIfRoute('signin') ?>><a href="<?php echo $getRoute('signin') ?>">Sign in</a>
                     </li>
                     <li <?php echo $activeIfRoute('login') ?>><a href="<?php echo $getRoute('login') ?>">Login</a></li>
-                <?php } else { ?>
+                <?php //} else { ?>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="glyphicon glyphicon-user"></i>
-                            <?php echo 'Hello, ' . $user->email ?> <span class="caret"></span>
+                            <?php //echo 'Hello, ' . $user->email ?> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li <?php echo $activeIfRoute('profile') ?>><a href="<?php echo $getRoute('profile') ?>">Profile</a>
@@ -63,7 +63,7 @@ $activeIfRoute = function ($item) use (&$route) {
                         </ul>
                     </li>
 
-                <?php } ?>
+                <?php //} ?>
             </ul>
         </div>
     </div>
@@ -71,17 +71,17 @@ $activeIfRoute = function ($item) use (&$route) {
 
 <div class="container theme-showcase" role="main">
     <div class="row">
-        <?php foreach ($flush as $type => $msgs) {
-            foreach ($msgs as $msg) { ?>
-                <div class="alert alert-<?php echo $type === 'error' ? 'danger' : $type ?> alert-dismissible"
+        <?php //foreach ($flush as $type => $msgs) {
+            //foreach ($msgs as $msg) { ?>
+                <div class="alert alert-<?php //echo $type === 'error' ? 'danger' : $type ?> alert-dismissible"
                      role="alert">
                     <button type="button" class="close" data-dismiss="alert"><span
                             aria-hidden="true">&times;</span><span
                             class="sr-only">Close</span></button>
-                    <?php echo $msg; ?>
+                    <?php //echo $msg; ?>
                 </div>
-            <?php } ?>
-        <?php } ?>
+            <?php //} ?>
+        <?php //} ?>
 
         <?php echo $content; ?>
     </div>

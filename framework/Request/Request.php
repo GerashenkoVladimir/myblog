@@ -53,6 +53,14 @@ class Request
     private $serverProtocol;
 
     /**
+     * HTTP host
+     *
+     * @access private
+     * @var string
+     */
+    private $httpHost;
+
+    /**
      * An associative array that contains the $_GET array.
      *
      * @access private
@@ -84,6 +92,7 @@ class Request
         $this->uri            = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
         $this->requestMethod  = $_SERVER['REQUEST_METHOD'];
         $this->serverProtocol = $_SERVER['SERVER_PROTOCOL'];
+        $this->httpHost       = $_SERVER['HTTP_HOST'];
         $this->sessionData    = $_SESSION;
         //добавить валидацию
         $this->getData  = $_GET;
@@ -121,6 +130,17 @@ class Request
     public function getServerProtocol()
     {
         return $this->serverProtocol;
+    }
+
+    /**
+     * Returns HTTP host
+     *
+     * @access public
+     * @return string
+     */
+    public function getHTTPHost()
+    {
+        return $this->httpHost;
     }
 
     /**
