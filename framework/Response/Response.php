@@ -11,12 +11,12 @@ class Response
     private $content;
     private $registry;
 
-    public function __construct($headers = array(), $statusCode = 200, $content)
+    public function __construct($content, $headers = array(), $statusCode = 200)
     {
+        $this->content    = $content;
         $this->registry   = Registry::getInstance();
         $this->headers    = $headers;
         $this->statusCode = $statusCode;
-        $this->content    = $content;
     }
 
     /**
@@ -40,7 +40,7 @@ class Response
         header("{$this->registry['request']->getServerProtocol()} $this->statusCode");
 
         foreach ($this->headers as $header) {
-            $header($header);
+            header($header);
         }
 
         echo $this->content;

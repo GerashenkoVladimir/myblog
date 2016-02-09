@@ -4,6 +4,7 @@ namespace Framework\Router;
 
 use Framework\Exception\RouterException;
 use Framework\Registry\Registry;
+use Framework\Response\Response;
 
 /**
  * Class Router
@@ -72,8 +73,8 @@ class Router
     }
 
     /**
-     * Parses the request URI, determines which need to use the controller and action and create object
-     *                          of Controller class.
+     * Parses the request URI, determines which need to use the controller and action, create object
+     *                          of Controller class and send generated page.
      *
      * @access public
      * @throws RouterException
@@ -104,7 +105,9 @@ class Router
             $this->readyRoute = $this->filterHTTPMethods($matchedRoutes);
             $this->controller = $this->readyRoute['controller'];
             $this->action     = $this->readyRoute['action'].'Action';
-            $this->createController($this->controller, $this->action, $this->args);
+            //ПЕРЕДЕЛАТЬ!!!
+            echo $this->createController($this->controller, $this->action, $this->args);
+
         } catch (RouterException $e){
             //Дописать страницу вывода ошибки
             echo $e;
@@ -202,7 +205,7 @@ class Router
      * @param array  $args
      *
      * @throws RouterException
-     * @return void
+     * @return Response|string
      */
     private function createController($controllerName, $action, $args)
     {
@@ -210,6 +213,6 @@ class Router
             throw new RouterException("Class \"$controllerName\" or action \"$action\" not exists!");
         }
         $controllerObj = new $controllerName();
-        call_user_func_array(array($controllerObj, $action), $args);
+        return call_user_func_array(array($controllerObj, $action), $args);
     }
 }

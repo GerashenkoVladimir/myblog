@@ -45,15 +45,15 @@ $activeIfRoute = function ($item) use (&$route) {
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <?php //if (is_null($user)) { ?>
+                <?php if (!isset($user)) { ?>
                     <li <?php echo $activeIfRoute('signin') ?>><a href="<?php echo $getRoute('signin') ?>">Sign in</a>
                     </li>
                     <li <?php echo $activeIfRoute('login') ?>><a href="<?php echo $getRoute('login') ?>">Login</a></li>
-                <?php //} else { ?>
+                <?php } else { ?>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="glyphicon glyphicon-user"></i>
-                            <?php //echo 'Hello, ' . $user->email ?> <span class="caret"></span>
+                            <?php echo 'Hello, ' . $user->email ?> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li <?php echo $activeIfRoute('profile') ?>><a href="<?php echo $getRoute('profile') ?>">Profile</a>
@@ -63,7 +63,7 @@ $activeIfRoute = function ($item) use (&$route) {
                         </ul>
                     </li>
 
-                <?php //} ?>
+                <?php } ?>
             </ul>
         </div>
     </div>

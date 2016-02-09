@@ -4,6 +4,7 @@ namespace Framework\Controller;
 
 use Framework\Registry\Registry;
 use Framework\Renderer\Renderer;
+use Framework\Response\Response;
 
 abstract class Controller
 {
@@ -22,7 +23,8 @@ abstract class Controller
             $renderer->set($arg, $value);
             $keys[] = $arg;
         }
-        $renderer->generatePage($template, $keys);
+        return $renderer->generatePage($template, $keys);
+
 
     }
 

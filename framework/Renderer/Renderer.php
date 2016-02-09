@@ -22,7 +22,7 @@ class Renderer
         $this->data[$key] = $value;
     }
 
-    public function generatePage($template, $keys)
+    public function generatePage($template)
     {
 
         foreach ($this->data as $var => $value) {
@@ -31,7 +31,10 @@ class Renderer
         ob_start();
         include $this->path.$template.'.php';
         $content = ob_get_clean();
-        return include $this->registry['config']['main_layout'];
+        ob_start();
+        include $this->registry['config']['main_layout'];
+        $page = ob_get_clean();
+        return $page;
     }
 
     private function initHelpers()

@@ -14,7 +14,7 @@ class Application
 
     public function run()
     {
-        echo '<pre>';
+        //echo '<pre>';
         $registry             = Registry::getInstance();
         $registry['request']  = new Request();
         $registry['config']   = require_once('../app/config/config.php');
@@ -32,6 +32,6 @@ class Application
         }
 
 
-        echo '</pre>';
+        //echo '</pre>';
     }
 }

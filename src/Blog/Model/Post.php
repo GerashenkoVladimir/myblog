@@ -53,12 +53,11 @@ class Post extends ActiveRecord
 
             return $posts;
         } else {
-            $allRecords = self::$database->select(self::getTable(), array('*'), array('id' => $record));
-            $posts = array();
-            foreach ($allRecords as $rec) {
-                $posts[] = new self($rec);
+            $record = self::$database->select(self::getTable(), array('*'), array('id' => $record));
+            foreach ($record as $rec) {
+                $post = new self($rec);
             }
-            return $posts;
+            return $post;
         }
     }
 }
