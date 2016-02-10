@@ -21,4 +21,8 @@ class User extends ActiveRecord implements UserInterface
     {
         return $this->role;
     }
+
+    public function isAuthenticated()
+    {
+    }
 }
