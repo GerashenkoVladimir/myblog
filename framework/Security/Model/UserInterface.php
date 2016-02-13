@@ -2,9 +2,7 @@
 
 namespace Framework\Security\Model;
 
-
 interface UserInterface
 {
-    function isAuthenticated();
-
+    public function isAuthenticated();
 }

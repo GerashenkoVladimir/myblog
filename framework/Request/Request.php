@@ -86,14 +86,13 @@ class Request
 
     public function __construct()
     {
-        $this->registry   = Registry::getInstance();
-        $this->allHeaders = getallheaders();
-        session_start();
+        $this->registry       = Registry::getInstance();
+        $this->allHeaders     = getallheaders();
         $this->uri            = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
         $this->requestMethod  = $_SERVER['REQUEST_METHOD'];
         $this->serverProtocol = $_SERVER['SERVER_PROTOCOL'];
         $this->httpHost       = $_SERVER['HTTP_HOST'];
-        $this->sessionData    = $_SESSION;
+        $this->sessionData    = $this->registry['sessions']->getAllSessionData();
         //добавить валидацию
         $this->getData  = $_GET;
         $this->postData = $_POST;

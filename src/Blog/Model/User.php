@@ -24,6 +24,5 @@ class User extends ActiveRecord implements UserInterface
 
     public function isAuthenticated()
     {
-
     }
 }
