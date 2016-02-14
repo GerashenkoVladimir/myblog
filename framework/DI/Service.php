@@ -15,7 +15,7 @@ class Service
 
     public static function set($key, $value)
     {
-
+        self::$resolvers[$key] = $value;
     }
 
     private static function initResolvers()

@@ -23,9 +23,8 @@ abstract class Controller
             $renderer->set($arg, $value);
             $keys[] = $arg;
         }
-        return $renderer->generatePage($template, $keys);
 
-
+        return new Response($renderer->generatePage($template, $keys));
     }
 
     private function generatePath()
@@ -34,5 +33,10 @@ abstract class Controller
         $end = strpos($calledClass, 'Controller');
         return $this->registry['config']['layouts'].substr($calledClass, 0, $end).'/';
 
+    }
+
+    public function getRequest()
+    {
+        return $this->registry['request'];
     }
 }

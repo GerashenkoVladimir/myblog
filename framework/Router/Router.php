@@ -2,9 +2,7 @@
 
 namespace Framework\Router;
 
-use Framework\Exception\RouterException;
 use Framework\Registry\Registry;
-use Framework\Response\Response;
 
 /**
  * Class Router
@@ -24,38 +22,6 @@ class Router
 
     private $routes;
 
-    /**
-     * An associative array that contains the parameters of route that matches to the request URI.
-     *
-     * @access private
-     * @var array
-     */
-    private $readyRoute = array();
-
-    /**
-     * Controller name
-     *
-     * @access private
-     * @var string
-     */
-    private $controller;
-
-    /**
-     * Controller action
-     *
-     * @access private
-     * @var string
-     */
-    private $action;
-
-    /**
-     * Array of arguments for controller's action
-     *
-     * @access private
-     * @var array
-     */
-    private $args;
-
     public function __construct()
     {
         $this->registry = Registry::getInstance();
@@ -73,12 +39,11 @@ class Router
     }
 
     /**
-     * Parses the request URI, determines which need to use the controller and action, create object
-     *                          of Controller class and send generated page.
+     * Parses the request URI, determines which need to use the controller and action, returns associative array that
+     *                          contains controller, action and arguments.
      *
      * @access public
-     * @throws RouterException
-     * @return void
+     * @return array|null
      */
     public function getRoute()
     {
@@ -96,22 +61,17 @@ class Router
             }
         }
 
-        $this->args = $this->getArgs($uri);
+        $args = $this->getArgs($uri);
 
-        try{
-            if ($matchedRoutes == null) {
-                throw new RouterException("ERROR 404!!! Page not found!");
-            }
-            $this->readyRoute = $this->filterHTTPMethods($matchedRoutes);
-            $this->controller = $this->readyRoute['controller'];
-            $this->action     = $this->readyRoute['action'].'Action';
-            //ПЕРЕДЕЛАТЬ!!!
-            echo $this->createController($this->controller, $this->action, $this->args);
-
-        } catch (RouterException $e){
-            //Дописать страницу вывода ошибки
-            echo $e;
+        if($matchedRoutes == null){
+            return null;
         }
+        $readyRoute = $this->filterHTTPMethods($matchedRoutes);
+
+
+        return array('controller' => $readyRoute['controller'],
+                         'action' => $readyRoute['action'].'Action',
+                           'args' => $args);
     }
 
     /**
@@ -193,26 +153,5 @@ class Router
         }
 
         return $matchedRoutes[0];
-    }
-
-    /**
-     * Creates object of controller and launches action.
-     *
-     * @access private
-     *
-     * @param string $controllerName
-     * @param string $action
-     * @param array  $args
-     *
-     * @throws RouterException
-     * @return Response|string
-     */
-    private function createController($controllerName, $action, $args)
-    {
-        if (!method_exists($controllerName, $action)) {
-            throw new RouterException("Class \"$controllerName\" or action \"$action\" not exists!");
-        }
-        $controllerObj = new $controllerName();
-        return call_user_func_array(array($controllerObj, $action), $args);
     }
 }

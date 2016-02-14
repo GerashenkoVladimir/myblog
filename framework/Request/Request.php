@@ -93,7 +93,7 @@ class Request
         $this->serverProtocol = $_SERVER['SERVER_PROTOCOL'];
         $this->httpHost       = $_SERVER['HTTP_HOST'];
         $this->sessionData    = $this->registry['sessions']->getAllSessionData();
-        //äîáàâèòü âàëèäàöèþ
+        //Ð´Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð²Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸ÑŽ
         $this->getData  = $_GET;
         $this->postData = $_POST;
     }
@@ -118,6 +118,20 @@ class Request
     public function getRequestMethod()
     {
         return $this->requestMethod;
+    }
+
+    /**
+     * Return "true" if request method is POST
+     *
+     * @access public
+     * @return boolean
+     */
+    public function isPost()
+    {
+        if ($this->requestMethod == 'POST') {
+            return true;
+        }
+        return false;
     }
 
     /**
