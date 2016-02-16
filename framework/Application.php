@@ -14,18 +14,25 @@ use Framework\Response\Response;
 
 class Application
 {
+    private $registry;
+    private $router;
+
+    public function __construct()
+    {
+        $this->registry             = Registry::getInstance();
+        $this->registry['sessions'] = new Sessions();
+        $this->registry['request']  = new Request();
+        $this->registry['config']   = require_once('../app/config/config.php');
+        $this->registry['dataBase'] = DataBase::getInstance();
+        $this->registry['router']   = $this->router = new Router();
+    }
 
     public function run()
     {
-        $registry             = Registry::getInstance();
-        $registry['sessions'] = new Sessions();
-        $registry['request']  = new Request();
-        $registry['config']   = require_once('../app/config/config.php');
-        $registry['dataBase'] = DataBase::getInstance();
-        $registry['router']   = $router = new Router();
+
 
         try{
-            $route = $router->getRoute();
+            $route = $this->router->getRoute();
             if ($route == null) {
                 throw new HTTPNotFoundException("ERROR 404!!! Page not found!");
             }
