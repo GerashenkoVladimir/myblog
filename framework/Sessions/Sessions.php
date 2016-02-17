@@ -2,8 +2,16 @@
 
 namespace Framework\Sessions;
 
-class Sessions
+use Framework\Inheritance\Singleton;
+
+class Sessions extends Singleton
 {
+
+    protected function __construct()
+    {
+
+    }
+
     private static $sessionStarted = false;
 
     private static function start()
@@ -55,5 +63,6 @@ class Sessions
         session_unset();
         session_destroy();
     }
-    
+
+
 }

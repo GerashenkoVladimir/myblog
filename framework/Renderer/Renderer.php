@@ -39,8 +39,6 @@ class Renderer
 
     private function initHelpers()
     {
-        $this->data['getRoute'] = function($route){
-            return $this->registry['router']->generateURL($route);
-        };
+        $this->data = array_merge($this->data, include('helpers.php'));
     }
 }

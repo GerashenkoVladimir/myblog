@@ -20,7 +20,7 @@ class Application
     public function __construct()
     {
         $this->registry             = Registry::getInstance();
-        $this->registry['sessions'] = new Sessions();
+        $this->registry['sessions'] = Sessions::getInstance();
         $this->registry['request']  = new Request();
         $this->registry['config']   = require_once('../app/config/config.php');
         $this->registry['dataBase'] = DataBase::getInstance();
