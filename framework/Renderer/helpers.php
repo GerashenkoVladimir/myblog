@@ -13,7 +13,6 @@ return array(
             $user['token'] = $token;
             $session->set('user', $user);
         }
-        var_dump($_SESSION);
         echo "<input type='hidden' name='token' value='$token'>";
     },
 

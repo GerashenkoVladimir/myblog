@@ -111,7 +111,9 @@ class DataBase extends Singleton
         $pdoStatement = $this->connection->prepare($queryString);
         $pdoStatement->execute($readyCompareData['values']);
 
-        return $pdoStatement->fetchAll(\PDO::FETCH_ASSOC);
+        $result = $pdoStatement->fetchAll(\PDO::FETCH_ASSOC);
+
+        return count($result) > 1 ? $result : $result[0];
     }
 
     /**

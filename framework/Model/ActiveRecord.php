@@ -8,11 +8,12 @@ use Framework\Registry\Registry;
 abstract class ActiveRecord
 {
     protected static $registry;
-    private static $database;
+    protected static $database;
+    protected static $sessions;
 
     const ALL_RECORDS = 'all';
 
-    public function __construct($record = array())
+    public function __construct($record)
     {
         foreach ($record as $r => $value){
             $this->$r = $value;

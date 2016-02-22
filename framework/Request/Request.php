@@ -99,14 +99,26 @@ class Request
     }
 
     /**
-     * Returns headers of http request.
+     * Returns all headers of http request.
      *
      * @access public
      * @return array
      */
-    public function getHeaders()
+    public function getAllHeaders()
     {
         return $this->allHeaders;
+    }
+
+    /**
+     * Returns header of http request.
+     *
+     * @access public
+     * @param string $key
+     * @return string|null
+     */
+    public function header($key)
+    {
+        return isset($this->allHeaders[$key]) ? $this->allHeaders[$key] : null;
     }
 
     /**
@@ -157,14 +169,26 @@ class Request
     }
 
     /**
-     * Returns data of $_GET array.
+     * Returns all data of $_GET array.
      *
      * @access public
      * @return array
      */
-    public function getGetData()
+    public function getAllGet()
     {
         return $this->getData;
+    }
+
+    /**
+     * Returns element of $_GET array.
+     *
+     * $access public
+     * @param string $key
+     * @return string|null
+     */
+    public function get($key)
+    {
+        return isset($this->getData[$key]) ? $this->getData[$key] : null;
     }
 
     /**
@@ -173,9 +197,21 @@ class Request
      * @access public
      * @return array
      */
-    public function getPostData()
+    public function getAllPost()
     {
         return $this->postData;
+    }
+
+    /**
+     * Returns element of $_POST array.
+     *
+     * @access public
+     * @param string $key
+     * @return string|null
+     */
+    public function post($key)
+    {
+        return isset($this->postData[$key]) ? $this->postData[$key] : null;
     }
 
     /**
@@ -187,35 +223,5 @@ class Request
     public function getUri()
     {
         return $this->uri;
-    }
-
-    /**
-     * Returns data of $_SESSION array.
-     *
-     * @access public
-     * @return array
-     */
-    public function getSessionData()
-    {
-        return $this->sessionData;
-    }
-
-    /**
-     * Returns an element of one of the arrays ($_GET, $_POST, $_SESSION and http request headers)
-     *
-     * @param string $arrayName
-     * @param string $element
-     *
-     * @return mixed|bool Returns false if element does not exists
-     */
-    public function getElement($arrayName, $element)
-    {
-        $action    = 'get'.ucfirst($arrayName).'Data';
-        $dataArray = $this->$action();
-        if (isset($dataArray[$element])) {
-            return $dataArray[$element];
-        }
-
-        return false;
     }
 }

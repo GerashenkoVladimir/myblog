@@ -2,35 +2,41 @@
 namespace Framework;
 
 use Framework\DataBase\DataBase;
+use Framework\DI\Service;
+use Framework\Exception\BadControllerException;
 use Framework\Exception\BadResponseException;
 use Framework\Exception\DataBaseException;
 use Framework\Exception\HTTPNotFoundException;
+use Framework\Exception\SecurityException;
+use Framework\Exception\ServiceException;
 use Framework\Registry\Registry;
 use Framework\Request\Request;
 use Framework\Router\Router;
+use Framework\Security\Security;
 use Framework\Sessions\Sessions;
 use Framework\Response\Response;
 
 
 class Application
 {
-    private $registry;
     private $router;
 
     public function __construct()
     {
-        $this->registry             = Registry::getInstance();
-        $this->registry['sessions'] = Sessions::getInstance();
-        $this->registry['request']  = new Request();
-        $this->registry['config']   = require_once('../app/config/config.php');
-        $this->registry['dataBase'] = DataBase::getInstance();
-        $this->registry['router']   = $this->router = new Router();
+        try {
+            Service::set('sessions', Sessions::getInstance());
+            Service::set('request', new Request());
+            Service::set('config', require_once('../app/config/config.php'));
+            Service::set('dataBase', DataBase::getInstance());
+            Service::set('router', $this->router = new Router());
+            Service::setSecurity(Security::class);
+        }catch (ServiceException $e){
+            echo "<pre>$e</pre>";
+        }
     }
 
     public function run()
     {
-
-
         try{
             $route = $this->router->getRoute();
             if ($route == null) {
@@ -42,11 +48,15 @@ class Application
             }
             //добавить обработку ошибок.
         } catch (DataBaseException $e){
-            echo $e;
+            echo "<pre>$e</pre>";
         } catch (HTTPNotFoundException $e){
-            echo $e;
+            echo "<pre>$e</pre>";
+        } catch(BadControllerException $e){
+            echo "<pre>$e</pre>";
+        } catch(SecurityException $e){
+            echo "<pre>$e</pre>";
         } catch (\Exception $e){
-            echo $e;
+            echo "<pre>$e</pre>";
         }
         $response->send();
     }
@@ -61,6 +71,7 @@ class Application
      * @param array  $args
      *
      * @throws HTTPNotFoundException
+     * @throws \Exception
      * @return Response|string
      */
     private function getResponse($controllerName, $action, $args)
@@ -68,7 +79,51 @@ class Application
         if (!method_exists($controllerName, $action)) {
             throw new HTTPNotFoundException("Class \"$controllerName\" or action \"$action\" not exists!");
         }
+        $controllerRefObj = new \ReflectionClass($controllerName);
+        $parent = $controllerRefObj->getParentClass();
+        if (!$parent || $parent->getName() != 'Framework\Controller\Controller') {
+            throw new BadControllerException("Your \"$controllerName\" class should inherit the \"Framework\\Controller\\
+            Controller\" class!");
+        }
         $controllerObj = new $controllerName();
         return call_user_func_array(array($controllerObj, $action), $args);
+    }
+}
+
+interface SomeInterfaceIncl
+{
+    function helloAction();
+}
+
+class SomeInclClass implements SomeInterfaceIncl
+{
+    function helloAction()
+    {
+        echo 'Hello world<br>';
+    }
+}
+
+interface SomeInterface{
+    function echoSomeThing();
+}
+
+class SomeClass implements SomeInterface
+{
+    public function __construct(SomeInterfaceIncl $class)
+    {
+        $class->helloAction();
+    }
+    function echoSomeThing()
+    {
+        echo 'Successful<br>';
+    }
+}
+
+class SomeService
+{
+    public function __construct(SomeClass $class)
+    {
+        //echo 'Successful';
+        $class->echoSomeThing();
     }
 }

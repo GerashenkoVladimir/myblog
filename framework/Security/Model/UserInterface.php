@@ -4,6 +4,6 @@ namespace Framework\Security\Model;
 
 interface UserInterface
 {
-    public function isAuthenticated();
-    public static function findByEmail($email);
+    public function findByEmail($email);
+    //public function setUser();
 }
