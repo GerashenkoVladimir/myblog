@@ -38,14 +38,34 @@ class DataBase extends Singleton
      */
     private $connection;
 
-    protected function __construct()
+
+    /**
+     * Implements pattern Singleton. Create and return DataBase class variable
+     *
+     * @access public
+     *
+     * @param Registry $registry
+     *
+     * @return DataBase
+     */
+    public static function getInstance(Registry $registry)
     {
-        $this->registry = Registry::getInstance();
+        $class = get_called_class();
+        if (!isset(static::$_instance[$class])) {
+            static::$_instance[$class] = new $class($registry);
+        }
+
+        return static::$_instance[$class];
+    }
+
+    protected function __construct(Registry $registry)
+    {
+        $this->registry = $registry;
         $this->dbConfig = $this->registry['config']['pdo'];
         try{
             $this->connection = new \PDO($this->dbConfig['dns'], $this->dbConfig['user'], $this->dbConfig['password']);
         } catch (\PDOException $e){
-            echo $e;
+            echo "<pre>$e</pre>";
         }
     }
 

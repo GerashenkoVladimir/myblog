@@ -2,8 +2,6 @@
 
 namespace Framework\Request;
 
-use Framework\Registry\Registry;
-
 /**
  * Class Request
  * Implements work with request.
@@ -12,14 +10,6 @@ use Framework\Registry\Registry;
  */
 class Request
 {
-    /**
-     * Object of Registry class
-     *
-     * @access private
-     * @var Registry
-     */
-    private $registry;
-
     /**
      * An associative array that contains the headers of http request.
      *
@@ -76,23 +66,13 @@ class Request
      */
     private $postData = array();
 
-    /**
-     * An associative array that contains the $_SESSION array.
-     *
-     * @access private
-     * @var array
-     */
-    private $sessionData = array();
-
     public function __construct()
     {
-        $this->registry       = Registry::getInstance();
         $this->allHeaders     = getallheaders();
         $this->uri            = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
         $this->requestMethod  = $_SERVER['REQUEST_METHOD'];
         $this->serverProtocol = $_SERVER['SERVER_PROTOCOL'];
         $this->httpHost       = $_SERVER['HTTP_HOST'];
-        $this->sessionData    = $this->registry['sessions']->getAllSessionData();
         //добавить валидацию
         $this->getData  = $_GET;
         $this->postData = $_POST;

@@ -12,7 +12,6 @@ use Framework\Exception\ServiceException;
 use Framework\Registry\Registry;
 use Framework\Request\Request;
 use Framework\Router\Router;
-use Framework\Security\Security;
 use Framework\Sessions\Sessions;
 use Framework\Response\Response;
 
@@ -24,15 +23,26 @@ class Application
     public function __construct()
     {
         try {
-            Service::set('sessions', Sessions::getInstance());
-            Service::set('request', new Request());
-            Service::set('config', require_once('../app/config/config.php'));
-            Service::set('dataBase', DataBase::getInstance());
-            Service::set('router', $this->router = new Router());
-            Service::setSecurity(Security::class);
+            $registry = Registry::getInstance();
+            $registry['config'] = require_once('../app/config/config.php');
+            $registry['request'] = new Request();
+            $registry['sessions'] = Sessions::getInstance();
+            $registry['router'] = $this->router = new Router();
+            Service::setSingleton('registry', $registry);
+            Service::setSingleton('dataBase', function(Registry $registry){
+                return DataBase::getInstance($registry);
+            }, array('registry'));
+            Service::set('Framework\Security\Model\UserInterface', 'Blog\Model\User');
+            Service::set('security', 'Framework\Security\Security',array('Framework\Security\Model\UserInterface',
+                'registry'));
+
+
         }catch (ServiceException $e){
             echo "<pre>$e</pre>";
+        }catch(\Exception $e){
+            echo "<pre>$e</pre>";
         }
+
     }
 
     public function run()

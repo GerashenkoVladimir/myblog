@@ -26,7 +26,7 @@ abstract class Singleton
      * @static
      * @return
      */
-    final public static function getInstance()
+    public static function getInstance()
     {
         $class = get_called_class();
         if (!isset(static::$_instance[$class])) {
@@ -37,13 +37,15 @@ abstract class Singleton
     }
 
 
-    abstract protected function __construct();
+    protected function __construct(){
 
-    private function __clone()
+    }
+
+    protected function __clone()
     {
     }
 
-    private function __wakeup()
+    protected function __wakeup()
     {
     }
 }

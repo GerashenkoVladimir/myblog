@@ -2,6 +2,7 @@
 
 namespace Blog\Model;
 
+use Framework\DI\Service;
 use Framework\Model\ActiveRecord;
 use Framework\Security\Model\UserInterface;
 
@@ -30,33 +31,30 @@ class User extends ActiveRecord implements UserInterface
         return $this->role;
     }
 
+    public function getFieldsNames()
+    {
+        return array('id', 'email', 'role', 'token');
+    }
+
     public function findByEmail($email)
     {
         self::initResources();
-        echo '<pre>';
-        var_dump($user = self::$database->select(self::getTable(), array('*'), array('email' => $email)));
+        $user = self::$database->select(self::getTable(), array('*'), array('email' => $email));
         foreach ($user as $u => $value){
             $this->$u = $value;
         }
 
-
-        echo $this->id;
-        echo $this->email;
-        echo $this->password;
-        echo $this->role;
-        echo '</pre>';
         return $this;
-
     }
 
     private static function initResources()
     {
-        if (!isset(self::$sessions)) {
-            self::$sessions = self::$registry['sessions'];
-        }
+        /*if (!isset(self::$sessions)) {
+            self::$sessions = Service::get('registry')['sessions'];
+        }*/
 
         if (!isset(self::$database)) {
-            self::$database =self::$registry['dataBase'];
+            self::$database = Service::get('dataBase');
         }
     }
 }

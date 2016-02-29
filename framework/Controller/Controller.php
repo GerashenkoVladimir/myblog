@@ -2,14 +2,18 @@
 
 namespace Framework\Controller;
 
+use Framework\Registry\Registry;
 use Framework\Renderer\Renderer;
 use Framework\Response\Response;
 
 abstract class Controller
 {
 
+    protected $registry;
+
     public function __construct()
     {
+        $this->registry = Registry::getInstance();
     }
 
     protected function render($template, $args)

@@ -3,16 +3,21 @@
 
 namespace Framework\Security;
 
+use Framework\Registry\Registry;
+use Framework\Security\Model\UserInterface;
+
 class Security
 {
-    public function __construct()
+    private $user;
+    private $registry;
+
+    public function __construct(UserInterface $user, Registry $registry)
     {
-
-        $userRefObj = new \ReflectionClass('Framework\Security\Model\UserInterface');
-
+        $this->user = $user;
+        $this->registry = $registry;
     }
     public function isAuthenticated()
     {
-        return false;
+        $userFields = $this->user->getFieldsNames();
     }
 }
