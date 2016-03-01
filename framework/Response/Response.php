@@ -2,19 +2,17 @@
 
 namespace Framework\Response;
 
-use Framework\Registry\Registry;
+use Framework\DI\Service;
 
 class Response
 {
-    private $headers;
+    protected $headers = array();
     private $statusCode;
     private $content;
-    private $registry;
 
     public function __construct($content, $headers = array(), $statusCode = 200)
     {
         $this->content    = $content;
-        $this->registry   = Registry::getInstance();
         $this->headers    = $headers;
         $this->statusCode = $statusCode;
     }
@@ -22,7 +20,7 @@ class Response
     /**
      * @param mixed $header
      */
-    public function setHeaders($header)
+    public function setHeader($header)
     {
         array_push($this->headers, $header);
     }
@@ -37,12 +35,16 @@ class Response
 
     public function send()
     {
-        header("{$this->registry['request']->getServerProtocol()} $this->statusCode");
+        header(Service::get('request')->getServerProtocol()." $this->statusCode");
 
         foreach ($this->headers as $header) {
             header($header);
         }
 
-        echo $this->content;
+        if (!is_null($this->content)) {
+            echo $this->content;
+        }
+
+
     }
 }

@@ -4,5 +4,8 @@ namespace Framework\Security\Model;
 
 interface UserInterface
 {
-    public function getFieldsNames();
+    public static function findByEmail($email);
+    public static function getFieldsNames();
+
+
 }

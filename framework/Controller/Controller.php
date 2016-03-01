@@ -2,9 +2,11 @@
 
 namespace Framework\Controller;
 
+use Framework\DI\Service;
 use Framework\Registry\Registry;
 use Framework\Renderer\Renderer;
 use Framework\Response\Response;
+use Framework\Response\ResponseRedirect;
 
 abstract class Controller
 {
@@ -16,8 +18,14 @@ abstract class Controller
         $this->registry = Registry::getInstance();
     }
 
+    public function redirect($route)
+    {
+        return new ResponseRedirect($route);
+    }
+
     protected function render($template, $args)
     {
+
         $renderer = new Renderer($this->generatePath());
         $keys = array();
         foreach ($args as $arg => $value) {
@@ -36,8 +44,13 @@ abstract class Controller
 
     }
 
+    protected function generateRoute($route)
+    {
+        return Service::get('router')->generateURL($route);
+    }
+
     public function getRequest()
     {
-        return $this->registry['request'];
+        return Service::get('request');
     }
 }

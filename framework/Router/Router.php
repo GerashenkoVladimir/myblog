@@ -2,6 +2,7 @@
 
 namespace Framework\Router;
 
+use Framework\DI\Service;
 use Framework\Registry\Registry;
 
 /**
@@ -31,7 +32,7 @@ class Router
     public function generateURL($routeName)
     {
         if (isset($this->registry['config']['routes'][$routeName]['pattern'])) {
-            return "http://{$this->registry['request']->getHTTPHost()}{$this->registry['config']['routes'][$routeName]['pattern']}";
+            return "http://".Service::get('request')->getHTTPHost()."{$this->registry['config']['routes'][$routeName]['pattern']}";
         } else {
             return '';
         }
@@ -47,7 +48,7 @@ class Router
      */
     public function getRoute()
     {
-        $uri = $this->registry['request']->getUri();
+        $uri = Service::get('request')->getUri();
 
         $this->routes = $this->registry['config']['routes'];
 
@@ -67,7 +68,6 @@ class Router
             return null;
         }
         $readyRoute = $this->filterHTTPMethods($matchedRoutes);
-
 
         return array('controller' => $readyRoute['controller'],
                          'action' => $readyRoute['action'].'Action',
@@ -142,7 +142,7 @@ class Router
         if (count($matchedRoutes) > 1) {
             foreach ($matchedRoutes as $mR) {
                 if (isset($mR['_requirements']['_method']) &&
-                    $this->registry['request']->getRequestMethod() == $mR['_requirements']['_method']
+                    Service::get('request')->getRequestMethod() == $mR['_requirements']['_method']
                 ) {
 
                     $readyRoute = $mR;

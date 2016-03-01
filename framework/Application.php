@@ -10,7 +10,6 @@ use Framework\Exception\HTTPNotFoundException;
 use Framework\Exception\SecurityException;
 use Framework\Exception\ServiceException;
 use Framework\Registry\Registry;
-use Framework\Request\Request;
 use Framework\Router\Router;
 use Framework\Sessions\Sessions;
 use Framework\Response\Response;
@@ -25,16 +24,15 @@ class Application
         try {
             $registry = Registry::getInstance();
             $registry['config'] = require_once('../app/config/config.php');
-            $registry['request'] = new Request();
-            $registry['sessions'] = Sessions::getInstance();
-            $registry['router'] = $this->router = new Router();
+            Service::set('request', 'Framework\Request\Request');
+            Service::setSingleton('router', $this->router = new Router());
+            Service::setSingleton('session', Sessions::getInstance());
             Service::setSingleton('registry', $registry);
             Service::setSingleton('dataBase', function(Registry $registry){
                 return DataBase::getInstance($registry);
             }, array('registry'));
             Service::set('Framework\Security\Model\UserInterface', 'Blog\Model\User');
-            Service::set('security', 'Framework\Security\Security',array('Framework\Security\Model\UserInterface',
-                'registry'));
+            Service::set('security', 'Framework\Security\Security',array('registry'));
 
 
         }catch (ServiceException $e){
@@ -49,10 +47,13 @@ class Application
     {
         try{
             $route = $this->router->getRoute();
+
             if ($route == null) {
                 throw new HTTPNotFoundException("ERROR 404!!! Page not found!");
             }
+
             $response = $this->getResponse($route['controller'],$route['action'],$route['args']);
+
             if (!$response instanceof Response) {
                 throw new BadResponseException('Wrong type of Response!');
             }
@@ -68,7 +69,9 @@ class Application
         } catch (\Exception $e){
             echo "<pre>$e</pre>";
         }
+
         $response->send();
+
     }
 
     /**
@@ -96,6 +99,7 @@ class Application
             Controller\" class!");
         }
         $controllerObj = new $controllerName();
+
         return call_user_func_array(array($controllerObj, $action), $args);
     }
 }

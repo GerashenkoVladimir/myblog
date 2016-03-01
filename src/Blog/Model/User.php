@@ -13,8 +13,6 @@ class User extends ActiveRecord implements UserInterface
     public $password;
     public $role;
 
-
-
     public function __construct($record = array())
     {
         parent::__construct($record);
@@ -31,28 +29,35 @@ class User extends ActiveRecord implements UserInterface
         return $this->role;
     }
 
-    public function getFieldsNames()
+    public static function getFieldsNames()
     {
-        return array('id', 'email', 'role', 'token');
+        return array('id', 'email', 'password', 'role');
     }
 
-    public function findByEmail($email)
+    public static function findByEmail($email)
     {
         self::initResources();
         $user = self::$database->select(self::getTable(), array('*'), array('email' => $email));
+        $userObj = new self();
         foreach ($user as $u => $value){
-            $this->$u = $value;
+            $userObj->$u = $value;
         }
 
-        return $this;
+        return $userObj;
+    }
+
+    public function save()
+    {
+        self::$database->insert(self::getTable(),array(
+            'id' => $this->id,
+            'email' => $this->email,
+            'password' => $this->password,
+            'role' => $this->role
+        ));
     }
 
     private static function initResources()
     {
-        /*if (!isset(self::$sessions)) {
-            self::$sessions = Service::get('registry')['sessions'];
-        }*/
-
         if (!isset(self::$database)) {
             self::$database = Service::get('dataBase');
         }

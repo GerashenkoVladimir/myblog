@@ -24,16 +24,16 @@ class Renderer
 
     public function generatePage($template)
     {
+        extract($this->data);
 
-        foreach ($this->data as $var => $value) {
-            $$var = $value;
-        }
         ob_start();
         include $this->path.$template.'.php';
         $content = ob_get_clean();
+
         ob_start();
         include $this->registry['config']['main_layout'];
         $page = ob_get_clean();
+
         return $page;
     }
 

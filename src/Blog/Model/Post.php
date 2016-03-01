@@ -30,5 +30,8 @@ class Post extends ActiveRecord
     }
 
 
-
+    public function save()
+    {
+        // TODO: Implement save() method.
+    }
 }

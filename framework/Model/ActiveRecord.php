@@ -1,17 +1,21 @@
 <?php
 namespace Framework\Model;
 
+use Framework\DataBase\DataBase;
 use Framework\DI\Service;
 
 abstract class ActiveRecord
 {
     protected static $registry;
+    /**
+     * @var DataBase
+     */
     protected static $database;
     protected static $sessions;
 
     const ALL_RECORDS = 'all';
 
-    public function __construct($record)
+    public function __construct($record = array())
     {
         foreach ($record as $r => $value){
             $this->$r = $value;
@@ -21,6 +25,8 @@ abstract class ActiveRecord
     }
 
     abstract static function getTable();
+
+    abstract public function save();
 
 
 

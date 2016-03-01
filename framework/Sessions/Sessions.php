@@ -6,6 +6,7 @@ use Framework\Inheritance\Singleton;
 
 class Sessions extends Singleton
 {
+    public $returnUrl;
 
     protected function __construct()
     {

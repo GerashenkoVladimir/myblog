@@ -19,7 +19,6 @@ class SecurityController extends Controller
         $errors = array();
 
         if ($this->getRequest()->isPost()) {
-
             if ($user = User::findByEmail($this->getRequest()->post('email'))) {
                 if ($user->password == $this->getRequest()->post('password')) {
                     Service::get('security')->setUser($user);
