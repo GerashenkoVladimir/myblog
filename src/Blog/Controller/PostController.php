@@ -3,6 +3,7 @@
 namespace Blog\Controller;
 
 use Blog\Model\Post;
+use Blog\Tools\Token;
 use Framework\Controller\Controller;
 use Framework\Exception\DatabaseException;
 use Framework\Exception\HttpNotFoundException;
@@ -24,7 +25,7 @@ class PostController extends Controller
 
     public function addAction()
     {
-        if ($this->getRequest()->isPost()) {
+        if ($this->getRequest()->isPost() && Token::checkToken()) {
             try {
                 $post = new Post();
                 $date = new \DateTime();

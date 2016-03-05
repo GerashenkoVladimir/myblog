@@ -2,7 +2,7 @@
 namespace Framework\Exception;
 
 
-class DataBaseException extends \Exception
+class DatabaseException extends \Exception
 {
 
 }

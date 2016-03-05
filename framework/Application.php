@@ -33,7 +33,7 @@ class Application
             }, array('registry'));
             Service::set('Framework\Security\Model\UserInterface', 'Blog\Model\User');
             Service::set('security', 'Framework\Security\Security',array('registry'));
-            Service::set('flushMessenger', 'Framework\FlushMessenger\FlushMessenger');
+            Service::setSingleton('flushMessenger', 'Framework\FlushMessenger\FlushMessenger');
 
 
         }catch (ServiceException $e){
@@ -59,7 +59,7 @@ class Application
                 throw new BadResponseException('Wrong type of Response!');
             }
             //добавить обработку ошибок.
-        } catch (DataBaseException $e){
+        } catch (DatabaseException $e){
             echo "<pre>$e</pre>";
         } catch (HTTPNotFoundException $e){
             echo "<pre>$e</pre>";
