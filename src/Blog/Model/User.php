@@ -62,4 +62,9 @@ class User extends ActiveRecord implements UserInterface
             self::$database = Service::get('dataBase');
         }
     }
+
+    public function getRules()
+    {
+        // TODO: Implement getRules() method.
+    }
 }

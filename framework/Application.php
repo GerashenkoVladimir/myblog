@@ -33,6 +33,7 @@ class Application
             }, array('registry'));
             Service::set('Framework\Security\Model\UserInterface', 'Blog\Model\User');
             Service::set('security', 'Framework\Security\Security',array('registry'));
+            Service::set('flushMessenger', 'Framework\FlushMessenger\FlushMessenger');
 
 
         }catch (ServiceException $e){

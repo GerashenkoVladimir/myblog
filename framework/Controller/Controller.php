@@ -18,9 +18,9 @@ abstract class Controller
         $this->registry = Registry::getInstance();
     }
 
-    public function redirect($route)
+    public function redirect($route, $message)
     {
-        return new ResponseRedirect($route);
+        return new ResponseRedirect($route, $message);
     }
 
     protected function render($template, $args)

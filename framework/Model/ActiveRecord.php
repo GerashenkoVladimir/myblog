@@ -20,13 +20,18 @@ abstract class ActiveRecord
         foreach ($record as $r => $value){
             $this->$r = $value;
         }
-
-
+        if (!isset(static::$database)) {
+            self::$database = Service::get('dataBase');
+        }
     }
 
-    abstract static function getTable();
+    abstract public static function getTable();
 
     abstract public function save();
+
+    abstract public function getRules();
+
+    abstract public static function getFieldsNames();
 
 
 

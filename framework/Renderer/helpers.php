@@ -16,4 +16,13 @@ return array(
         echo "<input type='hidden' name='token' value='$token'>";
     },
     'user' => \Framework\DI\Service::get('session')->get('user'),
+    'route' => \Framework\DI\Service::get('router')->getReadyRoute(),
+    'flush' => \Framework\DI\Service::get('session')->has('flush') ? \Framework\DI\Service::get('session')->get('flush')
+        : array(),
+    /*'flush' => array('info' => array('Some message 1!'),
+            'danger' => array('Some message 2!'),
+            'link' => array('Some message 3!'),
+            'success' => array('Some message 4!'),
+            'warning' => array('Some message 5!'),
+        ),*/
 );

@@ -52,6 +52,11 @@ class Sessions extends Singleton
         }
     }
 
+    public static function has($key)
+    {
+        return isset($_SESSION[$key]) ? true : false;
+    }
+
     public static function unsetAll()
     {
         self::start();

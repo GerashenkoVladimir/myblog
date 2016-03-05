@@ -23,6 +23,8 @@ class Router
 
     private $routes;
 
+    private $readyRoute;
+
     public function __construct()
     {
         $this->registry = Registry::getInstance();
@@ -67,11 +69,17 @@ class Router
         if($matchedRoutes == null){
             return null;
         }
-        $readyRoute = $this->filterHTTPMethods($matchedRoutes);
+        $this->readyRoute = $this->filterHTTPMethods($matchedRoutes);
 
-        return array('controller' => $readyRoute['controller'],
-                         'action' => $readyRoute['action'].'Action',
-                           'args' => $args);
+        return array('controller' => $this->readyRoute['controller'],
+                         'action' => $this->readyRoute['action'].'Action',
+                           'args' => $args,
+        );
+    }
+
+    public function getReadyRoute()
+    {
+        return isset($this->readyRoute) ? $this->readyRoute : null;
     }
 
     /**
