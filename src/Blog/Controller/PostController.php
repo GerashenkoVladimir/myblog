@@ -3,8 +3,8 @@
 namespace Blog\Controller;
 
 use Blog\Model\Post;
-use Blog\Tools\Token;
 use Framework\Controller\Controller;
+use Framework\Exception\BadTokenException;
 use Framework\Exception\DatabaseException;
 use Framework\Exception\HttpNotFoundException;
 use Framework\Response\Response;
@@ -12,7 +12,6 @@ use Framework\Validation\Validator;
 
 class PostController extends Controller
 {
-
     public function indexAction()
     {
         return $this->render('index.html', array('posts' => Post::find('all')));
@@ -25,7 +24,10 @@ class PostController extends Controller
 
     public function addAction()
     {
-        if ($this->getRequest()->isPost() && Token::checkToken()) {
+        if ($this->getRequest()->isPost()) {
+            if (!$this->getRequest()->checkToken()) {
+                throw new BadTokenException('You do not have permission for this operation !');
+            }
             try {
                 $post = new Post();
                 $date = new \DateTime();

@@ -2,10 +2,10 @@
 
 namespace Framework\Validation\Filter;
 
-use Framework\Validation\Filter;
+use Framework\Validation\FilterInterface;
 use Framework\Validation\Validator;
 
-class Length extends Filter
+class Length implements  FilterInterface
 {
     private $minLength;
 

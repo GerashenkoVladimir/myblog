@@ -11,12 +11,10 @@ use Framework\Security\Model\UserInterface;
 class Security
 {
 
-    private $registry;
     private $session;
 
-    public function __construct(Registry $registry)
+    public function __construct()
     {
-        $this->registry = $registry;
         $this->session = Service::get('session');
     }
 

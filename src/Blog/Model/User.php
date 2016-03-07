@@ -46,16 +46,6 @@ class User extends ActiveRecord implements UserInterface
         return $userObj;
     }
 
-    public function save()
-    {
-        self::$database->insert(self::getTable(),array(
-            'id' => $this->id,
-            'email' => $this->email,
-            'password' => $this->password,
-            'role' => $this->role
-        ));
-    }
-
     private static function initResources()
     {
         if (!isset(self::$database)) {

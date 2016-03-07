@@ -5,11 +5,11 @@ use Framework\DataBase\DataBase;
 use Framework\DI\Service;
 use Framework\Exception\BadControllerException;
 use Framework\Exception\BadResponseException;
+use Framework\Exception\BadTokenException;
 use Framework\Exception\DataBaseException;
 use Framework\Exception\HTTPNotFoundException;
 use Framework\Exception\SecurityException;
 use Framework\Exception\ServiceException;
-use Framework\Registry\Registry;
 use Framework\Router\Router;
 use Framework\Sessions\Sessions;
 use Framework\Response\Response;
@@ -22,17 +22,13 @@ class Application
     public function __construct()
     {
         try {
-            $registry = Registry::getInstance();
-            $registry['config'] = require_once('../app/config/config.php');
+            Service::setSimple('config', require_once('../app/config/config.php'));
             Service::set('request', 'Framework\Request\Request');
             Service::setSingleton('router', $this->router = new Router());
             Service::setSingleton('session', Sessions::getInstance());
-            Service::setSingleton('registry', $registry);
-            Service::setSingleton('dataBase', function(Registry $registry){
-                return DataBase::getInstance($registry);
-            }, array('registry'));
+            Service::setSingleton('dataBase', DataBase::getInstance());
             Service::set('Framework\Security\Model\UserInterface', 'Blog\Model\User');
-            Service::set('security', 'Framework\Security\Security',array('registry'));
+            Service::set('security', 'Framework\Security\Security');
             Service::setSingleton('flushMessenger', 'Framework\FlushMessenger\FlushMessenger');
 
 
@@ -64,6 +60,8 @@ class Application
         } catch (HTTPNotFoundException $e){
             echo "<pre>$e</pre>";
         } catch(BadControllerException $e){
+            echo "<pre>$e</pre>";
+        } catch(BadTokenException $e){
             echo "<pre>$e</pre>";
         } catch(SecurityException $e){
             echo "<pre>$e</pre>";

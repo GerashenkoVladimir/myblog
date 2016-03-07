@@ -2,9 +2,9 @@
 
 namespace Framework\DataBase;
 
+use Framework\DI\Service;
 use Framework\Exception\DataBaseException;
 use Framework\Inheritance\Singleton;
-use Framework\Registry\Registry;
 
 /**
  * Class DataBase
@@ -14,14 +14,6 @@ use Framework\Registry\Registry;
  */
 class DataBase extends Singleton
 {
-    /**
-     * Object of Registry class
-     *
-     * @access private
-     * @var Registry
-     */
-    private $registry;
-
     /**
      * Database configurations
      *
@@ -44,24 +36,21 @@ class DataBase extends Singleton
      *
      * @access public
      *
-     * @param Registry $registry
-     *
      * @return DataBase
      */
-    public static function getInstance(Registry $registry)
+    public static function getInstance()
     {
         $class = get_called_class();
         if (!isset(static::$_instance[$class])) {
-            static::$_instance[$class] = new $class($registry);
+            static::$_instance[$class] = new $class();
         }
 
         return static::$_instance[$class];
     }
 
-    protected function __construct(Registry $registry)
+    protected function __construct()
     {
-        $this->registry = $registry;
-        $this->dbConfig = $this->registry['config']['pdo'];
+        $this->dbConfig = Service::get('config')['pdo'];
         try{
             $this->connection = new \PDO($this->dbConfig['dns'], $this->dbConfig['user'], $this->dbConfig['password']);
         } catch (\PDOException $e){
@@ -130,10 +119,12 @@ class DataBase extends Singleton
 
         $pdoStatement = $this->connection->prepare($queryString);
         $pdoStatement->execute($readyCompareData['values']);
-
         $result = $pdoStatement->fetchAll(\PDO::FETCH_ASSOC);
+        if (count($result) > 1 || count($result) == 0){
+            return $result;
+        }
 
-        return count($result) > 1 ? $result : $result[0];
+        return $result[0];
     }
 
     /**
@@ -195,7 +186,7 @@ class DataBase extends Singleton
     public function delete($table, $comparedData)
     {
         if (!is_string($table) || !is_array($comparedData)) {
-            throw new DataBaseException('Error! Wrong type of parameters $table or $compareDate!');
+            throw new DataBaseException('Error! Wrong type of parameters $table or $compareData!');
         }
         $readyCompareData = $this->prepareData($comparedData, ' AND ');
         $queryString      = "DELETE FROM $table WHERE {$readyCompareData['placeholderString']}";

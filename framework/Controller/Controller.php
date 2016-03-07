@@ -3,24 +3,26 @@
 namespace Framework\Controller;
 
 use Framework\DI\Service;
-use Framework\Registry\Registry;
 use Framework\Renderer\Renderer;
+use Framework\Request\Request;
 use Framework\Response\Response;
 use Framework\Response\ResponseRedirect;
 
 abstract class Controller
 {
 
-    protected $registry;
 
     public function __construct()
     {
-        $this->registry = Registry::getInstance();
     }
 
-    public function redirect($route, $message)
+    public function redirect($route, $message = null)
     {
-        return new ResponseRedirect($route, $message);
+        if ($message != null) {
+            Service::get('flushMessenger')->setMessage($message);
+        }
+
+        return new ResponseRedirect($route);
     }
 
     protected function render($template, $args)
@@ -40,7 +42,7 @@ abstract class Controller
     {
         $calledClass = array_pop(explode('\\', get_called_class()));
         $end = strpos($calledClass, 'Controller');
-        return $this->registry['config']['layouts'].substr($calledClass, 0, $end).'/';
+        return Service::get('config')['layouts'].substr($calledClass, 0, $end).'/';
 
     }
 
@@ -49,6 +51,10 @@ abstract class Controller
         return Service::get('router')->generateURL($route);
     }
 
+    /**
+     * @return Request
+     * @throws \Framework\Exception\ServiceException
+     */
     public function getRequest()
     {
         return Service::get('request');

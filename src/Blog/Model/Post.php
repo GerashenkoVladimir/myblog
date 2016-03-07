@@ -29,16 +29,6 @@ class Post extends ActiveRecord
         );
     }
 
-
-    public function save()
-    {
-        self::$database->insert(self::getTable(),array(
-            'title' => $this->title,
-            'content' => $this->content,
-            'date' => $this->date
-        ));
-    }
-
     public static function getFieldsNames()
     {
         return array('title', 'content', 'date');

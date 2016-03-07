@@ -8,6 +8,7 @@ class Service
     private static $definitions = array();
     private static $singlDefinitions = array();
     private static $params = array();
+    private static $simpleDefinitions = array();
 
     public static function set($class, $definition , array $params = array())
     {
@@ -17,6 +18,8 @@ class Service
         }
         if (isset(self::$singlDefinitions[$class])) {
             unset(self::$singlDefinitions[$class]);
+        } elseif (isset(self::$simpleDefinitions[$class])) {
+            unset(self::$simpleDefinitions[$class]);
         }
         self::$definitions[$class] = $definition;
         self::$params[$class] = $params;
@@ -30,22 +33,37 @@ class Service
         }
         if (isset(self::$definitions[$class])) {
             unset(self::$definitions[$class]);
+        } elseif (isset(self::$simpleDefinitions[$class])) {
+            unset(self::$simpleDefinitions[$class]);
         }
         self::$singlDefinitions[$class] = $definition;
         self::$params[$class] = $params;
 
     }
 
+    public static function setSimple($serviceName, $data)
+    {
+        if (isset(self::$definitions[$serviceName])) {
+            unset(self::$definitions[$serviceName]);
+        } elseif (isset(self::$singlDefinitions[$serviceName])) {
+            unset(self::$simpleDefinitions[$serviceName]);
+        }
+        self::$simpleDefinitions[$serviceName] = $data;
+    }
+
     public static function get($class, $params = array())
     {
-       if (!isset(self::$definitions[$class]) && !isset(self::$singlDefinitions[$class])) {
+       if (!isset(self::$definitions[$class]) && !isset(self::$singlDefinitions[$class])
+           && !isset(self::$simpleDefinitions[$class])) {
             throw new ServiceException("Service '$class' is not registered!");
         }
 
         if ($isSingleton = isset(self::$singlDefinitions[$class])) {
             $definition = self::$singlDefinitions[$class];
-        } else {
+        } elseif (isset(self::$definitions[$class])) {
             $definition = self::$definitions[$class];
+        } else {
+            return self::$simpleDefinitions[$class];
         }
 
         $args = self::getArgs($class,$params);

@@ -3,10 +3,10 @@
 namespace Framework\Validation\Filter;
 
 
-use Framework\Validation\Filter;
+use Framework\Validation\FilterInterface;
 use Framework\Validation\Validator;
 
-class NotBlank extends Filter
+class NotBlank implements  FilterInterface
 {
 
     public function validate($param, $paramName, Validator $validator)

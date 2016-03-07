@@ -2,17 +2,15 @@
 
 namespace Framework\Renderer;
 
-use Framework\Registry\Registry;
+use Framework\DI\Service;
 
 class Renderer
 {
     private $data = array();
     private $path;
-    private $registry;
 
     public function __construct($path)
     {
-        $this->registry = Registry::getInstance();
         $this->path = $path;
         $this->initHelpers();
     }
@@ -31,7 +29,7 @@ class Renderer
         $content = ob_get_clean();
 
         ob_start();
-        include $this->registry['config']['main_layout'];
+        include Service::get('config')['main_layout'];
         $page = ob_get_clean();
 
         return $page;

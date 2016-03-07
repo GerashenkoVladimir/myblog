@@ -2,6 +2,7 @@
 
 namespace Blog\Controller;
 
+use Blog\Model\User;
 use Framework\Controller\Controller;
 
 class MyController extends Controller
@@ -23,9 +24,7 @@ class MyController extends Controller
 
     public function simpleAction()
     {
-        $this->registry['hello'] = 'Hello world!!!';
-
-        echo $this->registry['hello'];
+        User::find((int)8)->delete();
 
     }
 

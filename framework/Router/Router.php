@@ -13,28 +13,19 @@ use Framework\Registry\Registry;
  */
 class Router
 {
-    /**
-     * Object of Registry class
-     *
-     * @access private
-     * @var Registry
-     */
-    private $registry;
-
     private $routes;
 
     private $readyRoute;
 
     public function __construct()
     {
-        $this->registry = Registry::getInstance();
-        $this->routes   = $this->registry['config']['routes'];
+        $this->routes   = Service::get('config')['routes'];
     }
 
     public function generateURL($routeName)
     {
-        if (isset($this->registry['config']['routes'][$routeName]['pattern'])) {
-            return "http://".Service::get('request')->getHTTPHost()."{$this->registry['config']['routes'][$routeName]['pattern']}";
+        if (isset(Service::get('config')['routes'][$routeName]['pattern'])) {
+            return "http://".Service::get('request')->getHTTPHost().Service::get('config')['routes'][$routeName]['pattern'];
         } else {
             return '';
         }
@@ -52,7 +43,7 @@ class Router
     {
         $uri = Service::get('request')->getUri();
 
-        $this->routes = $this->registry['config']['routes'];
+        $this->routes = Service::get('config')['routes'];
 
         $matchedRoutes = array();
 

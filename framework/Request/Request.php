@@ -2,6 +2,8 @@
 
 namespace Framework\Request;
 
+use Framework\DI\Service;
+
 /**
  * Class Request
  * Implements work with request.
@@ -66,6 +68,8 @@ class Request
      */
     private $postData = array();
 
+    private $cookieData = array();
+
     public function __construct()
     {
         $this->allHeaders     = getallheaders();
@@ -73,9 +77,9 @@ class Request
         $this->requestMethod  = $_SERVER['REQUEST_METHOD'];
         $this->serverProtocol = $_SERVER['SERVER_PROTOCOL'];
         $this->httpHost       = $_SERVER['HTTP_HOST'];
-        //добавить валидацию
-        $this->getData  = $_GET;
-        $this->postData = $_POST;
+        $this->getData  = $this->sanitizeData($_GET);
+        $this->postData = $this->sanitizeData($_POST);
+        $this->cookieData = $this->sanitizeData($_COOKIE);
     }
 
     /**
@@ -203,5 +207,35 @@ class Request
     public function getUri()
     {
         return $this->uri;
+    }
+
+    public function checkToken()
+    {
+        if ($this->post('token') === Service::get('session')->get('token')) {
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function sanitizeData($data)
+    {
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
+                $value = $this->sanitizeString($value);
+            }
+        } else {
+            $data = $this->sanitizeString($data);
+        }
+        return $data;
+    }
+
+    private function sanitizeString($data)
+    {
+        $data = stripslashes($data);
+        $data = htmlentities($data);
+        $data = strip_tags($data);
+        return $data;
     }
 }
