@@ -3,7 +3,6 @@
 namespace Framework\Router;
 
 use Framework\DI\Service;
-use Framework\Registry\Registry;
 
 /**
  * Class Router

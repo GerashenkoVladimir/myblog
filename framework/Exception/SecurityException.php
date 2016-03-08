@@ -3,7 +3,7 @@
 namespace Framework\Exception;
 
 
-class SecurityException extends \Exception
+class SecurityException extends MainException
 {
 
 }

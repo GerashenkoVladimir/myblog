@@ -2,8 +2,7 @@
 
 namespace Framework\Exception;
 
-
-class BadControllerException extends \Exception
+class BadControllerException extends MainException
 {
 
 }

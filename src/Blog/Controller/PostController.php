@@ -26,7 +26,7 @@ class PostController extends Controller
     {
         if ($this->getRequest()->isPost()) {
             if (!$this->getRequest()->checkToken()) {
-                throw new BadTokenException('You do not have permission for this operation !');
+                throw new BadTokenException('You do not have permission for this operation !', 403);
             }
             try {
                 $post = new Post();

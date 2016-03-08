@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'mode'              => 'dev',
+    'mode'              => 'user', //user|dev
     'routes'            => include('routes.php'),
     'main_layout'       => __DIR__.'/../../src/Blog/views/layout.html.php',
     'layouts'           => __DIR__.'/../../src/Blog/views/',

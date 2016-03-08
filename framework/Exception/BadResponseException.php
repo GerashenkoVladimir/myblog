@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Framework\Exception;
 
-
-class BadResponseException extends \Exception
+class BadResponseException extends MainException
 {
 
 }

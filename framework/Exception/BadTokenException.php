@@ -3,7 +3,7 @@
 namespace Framework\Exception;
 
 
-class BadTokenException extends \Exception
+class BadTokenException extends MainException
 {
 
 }

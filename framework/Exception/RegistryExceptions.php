@@ -1,7 +1,7 @@
 <?php
 namespace Framework\Exception;
 
-class RegistryExceptions extends \Exception
+class RegistryExceptions extends MainException
 {
 
 }

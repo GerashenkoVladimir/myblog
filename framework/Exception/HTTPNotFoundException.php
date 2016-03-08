@@ -1,7 +1,7 @@
 <?php
 namespace Framework\Exception;
 
-class HTTPNotFoundException extends \Exception
+class HttpNotFoundException extends MainException
 {
 
 }
