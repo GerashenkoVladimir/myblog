@@ -40,7 +40,8 @@ abstract class Controller
 
     private function generatePath()
     {
-        $calledClass = array_pop(explode('\\', get_called_class()));
+        $classNameArray =  explode('\\', get_called_class());
+        $calledClass = array_pop($classNameArray);
         $end = strpos($calledClass, 'Controller');
         return Service::get('config')['layouts'].substr($calledClass, 0, $end).'/';
 

@@ -1,0 +1,14 @@
+____________________________________________________________
+2016-03-07 21:05:44 (CET)
+2048
+Static function Framework\Model\ActiveRecord::getTable() should not be abstract
+C:\xampp\htdocs\myblog\framework\Model\ActiveRecord.php
+38
+____________________________________________________________
+____________________________________________________________
+2016-03-07 21:05:44 (CET)
+2048
+Static function Framework\Model\ActiveRecord::getFieldsNames() should not be abstract
+C:\xampp\htdocs\myblog\framework\Model\ActiveRecord.php
+40
+____________________________________________________________
