@@ -16,7 +16,6 @@ class User extends ActiveRecord implements UserInterface
     public function __construct($record = array())
     {
         parent::__construct($record);
-        self::initResources();
     }
 
     public static function getTable()
@@ -36,7 +35,9 @@ class User extends ActiveRecord implements UserInterface
 
     public static function findByEmail($email)
     {
-        self::initResources();
+        if (!isset(self::$database)) {
+            self::$database = Service::get('dataBase');
+        }
         $user = self::$database->select(self::getTable(), array('*'), array('email' => $email));
         $userObj = new self();
         foreach ($user as $u => $value){
@@ -44,13 +45,6 @@ class User extends ActiveRecord implements UserInterface
         }
 
         return $userObj;
-    }
-
-    private static function initResources()
-    {
-        if (!isset(self::$database)) {
-            self::$database = Service::get('dataBase');
-        }
     }
 
     public function getRules()

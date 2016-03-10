@@ -146,7 +146,9 @@ class DataBase extends Singleton
         $readyData    = $this->prepareInsertData($data);
         $queryString  = "INSERT INTO $table ({$readyData['params']}) VALUES ({$readyData['placeholders']})";
         $pdoStatement = $this->connection->prepare($queryString);
-        $pdoStatement->execute($readyData['values']);
+        if(!$pdoStatement->execute($readyData['values'])){
+            throw new DatabaseException('This record already exists!');
+        }
     }
 
     /**
