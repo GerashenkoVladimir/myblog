@@ -31,6 +31,7 @@ class Service
             throw new ServiceException('The parameter specified at registration should be based object,
              closure or class name!');
         }
+
         if (isset(self::$definitions[$class])) {
             unset(self::$definitions[$class]);
         } elseif (isset(self::$simpleDefinitions[$class])) {

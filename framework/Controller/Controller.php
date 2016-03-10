@@ -25,7 +25,7 @@ abstract class Controller
         return new ResponseRedirect($route);
     }
 
-    protected function render($template, $args)
+    protected function render($template, $args = array())
     {
 
         $renderer = new Renderer($this->generatePath());

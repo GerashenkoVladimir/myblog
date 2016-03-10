@@ -5,7 +5,7 @@
  */
 
 require_once(__DIR__ . '/../framework/Loader.php');
-\Framework\ErrorHandler\ErrorHandler::loadErrorHandler();
+//\Framework\ErrorHandler\ErrorHandler::loadErrorHandler();
 Loader::addNamespacePath('Blog\\', __DIR__ . '/../src/Blog');
 
 

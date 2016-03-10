@@ -4,6 +4,8 @@ namespace Framework\Exception;
 
 
 use Framework\DI\Service;
+use Framework\Renderer\Renderer;
+use Framework\Response\Response;
 
 class MainException extends \Exception
 {
@@ -30,5 +32,21 @@ class MainException extends \Exception
         if (Service::get('config')['mode'] == 'dev') {
             echo "<pre>{$this}</pre>";
         }
+    }
+
+    public static function handleForUser(\Exception $exception, $messages = array())
+    {
+        if ($exception == null) {
+            $exception = new \Exception('Sorry for the inconvenience. We are working to resolve this issue.
+            Thank you for your patience.');
+        }
+        $renderer = new Renderer(Service::get('config')['error_500'], true);
+        foreach ($messages as $message => $m) {
+           $renderer->set($message, $m);
+        }
+        $content  = $renderer->generatePage();
+        $response = new Response($content, array(), 500);
+        $exception->saveExceptionLog();
+        return $response;
     }
 }

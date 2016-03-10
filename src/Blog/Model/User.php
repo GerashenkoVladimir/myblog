@@ -46,9 +46,4 @@ class User extends ActiveRecord implements UserInterface
 
         return $userObj;
     }
-
-    public function getRules()
-    {
-        // TODO: Implement getRules() method.
-    }
 }

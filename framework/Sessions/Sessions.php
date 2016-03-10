@@ -10,65 +10,42 @@ class Sessions extends Singleton
 
     protected function __construct()
     {
-
+        session_start();
     }
 
-    private static $sessionStarted = false;
-
-    private static function start()
+    public function get($key = null)
     {
-        if (!self::$sessionStarted) {
-            session_start();
-            self::$sessionStarted = true;
-        }
-    }
-
-    public static function getAllSessionData()
-    {
-        self::start();
-        return $_SESSION;
-    }
-
-    public static function get($key)
-    {
-        self::start();
-        if (isset($_SESSION[$key])) {
+        if ($key == null) {
+            return $_SESSION;
+        } elseif (isset($_SESSION[$key])) {
             return $_SESSION[$key];
         }
+
         return null;
     }
 
-    public static function set($key, $value)
+    public function set($key, $value)
     {
-        self::start();
         $_SESSION[$key] = $value;
     }
 
-    public static function unsetParam($key)
+    public function unsetParam($key = null)
     {
-        self::start();
-        if (isset($_SESSION[$key])) {
+        if ($key == null) {
+            session_unset();
+        } elseif (isset($_SESSION[$key])) {
             unset($_SESSION[$key]);
         }
     }
 
-    public static function has($key)
+    public function has($key)
     {
-        return isset($_SESSION[$key]) ? true : false;
+        return isset($_SESSION[$key])?true:false;
     }
 
-    public static function unsetAll()
+    public function destroy()
     {
-        self::start();
-        session_unset();
-    }
-
-    public static function destroy()
-    {
-        self::start();
         session_unset();
         session_destroy();
     }
-
-
 }

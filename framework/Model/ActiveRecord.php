@@ -35,11 +35,15 @@ abstract class ActiveRecord
         $this->fields = static::getFieldsNames();
     }
 
+
+
     abstract public static function getTable();
 
     abstract public static function getFieldsNames();
 
-    abstract public function getRules();
+    public function getRules(){
+        return array();
+    }
 
     public function save()
     {

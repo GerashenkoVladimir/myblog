@@ -8,10 +8,12 @@ class Renderer
 {
     private $data = array();
     private $path;
+    private $isFool;
 
-    public function __construct($path)
+    public function __construct($path, $isFull = false)
     {
-        $this->path = $path;
+        $this->path   = $path;
+        $this->isFool = $isFull;
         $this->initHelpers();
     }
 
@@ -20,12 +22,16 @@ class Renderer
         $this->data[$key] = $value;
     }
 
-    public function generatePage($template)
+    public function generatePage($template = null)
     {
         extract($this->data);
 
         ob_start();
-        include $this->path.$template.'.php';
+        $path = $this->path.$template.'.php';
+        if ($template == null && $this->isFool) {
+            $path = $this->path;
+        }
+        require_once $path;
         $content = ob_get_clean();
 
         ob_start();

@@ -5,7 +5,6 @@ namespace Framework\Security;
 
 use Framework\DI\Service;
 use Framework\Exception\SecurityException;
-use Framework\Registry\Registry;
 use Framework\Security\Model\UserInterface;
 
 class Security

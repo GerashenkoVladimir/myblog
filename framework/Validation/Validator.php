@@ -23,16 +23,13 @@ class Validator
                 $rule->validate($this->record->$var, $var, $this);
             }
         }
-        if (!empty($this->errors)) {
-            return false;
-        }
 
-        return true;
+        return !empty($this->errors)?false:true;
     }
 
     public function setError($fieldName, $error)
     {
-        $this->errors[$fieldName] = $error;
+        $this->errors[$fieldName] = isset($this->errors[$fieldName])?$this->errors[$fieldName].'<br>'.$error:$error;
     }
 
     public function getErrors()
