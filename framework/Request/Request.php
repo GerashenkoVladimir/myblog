@@ -72,36 +72,29 @@ class Request
 
     public function __construct()
     {
-        $this->allHeaders     = getallheaders();
-        $this->uri            = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-        $this->requestMethod  = $_SERVER['REQUEST_METHOD'];
+        $this->allHeaders = getallheaders();
+        $this->uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+        $this->requestMethod = $_SERVER['REQUEST_METHOD'];
         $this->serverProtocol = $_SERVER['SERVER_PROTOCOL'];
-        $this->httpHost       = $_SERVER['HTTP_HOST'];
-        $this->getData  = $this->sanitizeData($_GET);
+        $this->httpHost = $_SERVER['HTTP_HOST'];
+        $this->getData = $this->sanitizeData($_GET);
         $this->postData = $this->sanitizeData($_POST);
         $this->cookieData = $this->sanitizeData($_COOKIE);
     }
 
     /**
-     * Returns all headers of http request.
+     * Returns headers of http request.
      *
      * @access public
-     * @return array
+     * @param string|null $key
+     * @return array|string|null
      */
-    public function getAllHeaders()
+    public function getHeaders($key = null)
     {
-        return $this->allHeaders;
-    }
+        if ($key == null) {
+            return $this->allHeaders;
+        }
 
-    /**
-     * Returns header of http request.
-     *
-     * @access public
-     * @param string $key
-     * @return string|null
-     */
-    public function header($key)
-    {
         return isset($this->allHeaders[$key]) ? $this->allHeaders[$key] : null;
     }
 
@@ -124,10 +117,29 @@ class Request
      */
     public function isPost()
     {
-        if ($this->requestMethod == 'POST') {
-            return true;
-        }
-        return false;
+        return $this->requestMethod == 'POST';
+    }
+
+    /**
+     * Return "true" if request method is GET
+     *
+     * @access public
+     * @return boolean
+     */
+    public function isGet()
+    {
+        return $this->requestMethod == 'GET';
+    }
+
+    /**
+     * Returns "true" if request is "ajax"
+     *
+     * @access public
+     * @return boolean
+     */
+    public function isAjax()
+    {
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
     }
 
     /**
@@ -153,25 +165,18 @@ class Request
     }
 
     /**
-     * Returns all data of $_GET array.
+     * Returns data of $_GET array.
      *
      * @access public
-     * @return array
+     * @param string|null $key
+     * @return array|string|null
      */
-    public function getAllGet()
+    public function get($key = null)
     {
-        return $this->getData;
-    }
+        if ($key == null) {
+            return $this->getData;
+        }
 
-    /**
-     * Returns element of $_GET array.
-     *
-     * $access public
-     * @param string $key
-     * @return string|null
-     */
-    public function get($key)
-    {
         return isset($this->getData[$key]) ? $this->getData[$key] : null;
     }
 
@@ -179,22 +184,15 @@ class Request
      * Returns data of $_POST array.
      *
      * @access public
-     * @return array
+     * @param string|null $key
+     * @return array|string|null
      */
-    public function getAllPost()
+    public function post($key = null)
     {
-        return $this->postData;
-    }
+        if ($key == null) {
+            return $this->postData;
+        }
 
-    /**
-     * Returns element of $_POST array.
-     *
-     * @access public
-     * @param string $key
-     * @return string|null
-     */
-    public function post($key)
-    {
         return isset($this->postData[$key]) ? $this->postData[$key] : null;
     }
 
@@ -211,12 +209,7 @@ class Request
 
     public function checkToken()
     {
-        if ($this->post('token') === Service::get('session')->get('token')) {
-
-            return true;
-        }
-
-        return false;
+        return $this->post('token') == Service::get('session')->get('token');
     }
 
     private function sanitizeData($data)
@@ -228,6 +221,7 @@ class Request
         } else {
             $data = $this->sanitizeString($data);
         }
+
         return $data;
     }
 
@@ -236,6 +230,7 @@ class Request
         $data = stripslashes($data);
         $data = htmlentities($data);
         $data = strip_tags($data);
+
         return $data;
     }
 }
