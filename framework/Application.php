@@ -11,19 +11,43 @@ use Framework\Exception\HttpNotFoundException;
 use Framework\Exception\MainException;
 use Framework\Exception\SecurityException;
 use Framework\Exception\ServiceException;
-use Framework\Renderer\Renderer;
 use Framework\Router\Router;
 use Framework\Sessions\Sessions;
 use Framework\Response\Response;
 
+/**
+ * Class Application
+ *
+ * @package Framework
+ */
 class Application
 {
+    /**
+     * Router
+     *
+     * @access private
+     * @var Router
+     */
     private $router;
+
+    /**
+     * Contains the basic application settings
+     *
+     * @access private
+     * @var array
+     */
     private $config;
 
+    /**
+     * Application constructor
+     *
+     * @access public
+     *
+     * @param $config
+     */
     public function __construct($config)
     {
-        try{
+        try {
             Service::setSimple('config', $this->config = require_once($config));
             Service::set('request', 'Framework\Request\Request');
             Service::setSingleton('router', $this->router = new Router());
@@ -31,22 +55,30 @@ class Application
             Service::setSingleton('dataBase', DataBase::getInstance());
             Service::set('security', 'Framework\Security\Security');
             Service::setSingleton('flushMessenger', 'Framework\FlushMessenger\FlushMessenger');
-        } catch (ServiceException $e){
-        } catch (\Exception $e){
+
+            Service::set('app', $this);
+        } catch (ServiceException $e) {
+        } catch (\Exception $e) {
         } finally {
             if (isset($e)) {
-                $code         = isset($code)?$code:500;
-                $errorMessage = isset($errorMessage)?$errorMessage:'Sorry for the inconvenience. We are working
+                $code = isset($code) ? $code : 500;
+                $errorMessage = isset($errorMessage) ? $errorMessage : 'Sorry for the inconvenience. We are working
                 to resolve this issue. Thank you for your patience.';
-                $responce     = MainException::handleForUser($e, array('code' => $code, 'message' => $errorMessage));
+                $responce = MainException::handleForUser($e, array('code' => $code, 'message' => $errorMessage));
                 $responce->send();
             }
         }
     }
 
+    /**
+     * Starts application
+     *
+     * @access public
+     * @return void
+     */
     public function run()
     {
-        try{
+        try {
             $route = $this->router->getRoute();
 
             if ($route == null) {
@@ -58,32 +90,32 @@ class Application
             if (!$response instanceof Response) {
                 throw new BadResponseException('Wrong type of Response!');
             }
-        } catch (DatabaseException $e){
+        } catch (DatabaseException $e) {
             $errorMessage = 'Sorry for the inconvenience. We are working to resolve this issue.
             Thank you for your patience.';
-            $code         = 500;
-        } catch (HttpNotFoundException $e){
-            $code         = $e->getCode();
+            $code = 500;
+        } catch (HttpNotFoundException $e) {
+            $code = $e->getCode();
             $errorMessage = 'Page not found!';
-        } catch (BadControllerException $e){
+        } catch (BadControllerException $e) {
             $errorMessage = 'Sorry for the inconvenience. We are working to resolve this issue.
             Thank you for your patience.';
-            $code         = 500;
-        } catch (BadTokenException $e){
+            $code = 500;
+        } catch (BadTokenException $e) {
             $errorMessage = $e->getMessage();
-            $code         = $e->getCode();
-        } catch (SecurityException $e){
+            $code = $e->getCode();
+        } catch (SecurityException $e) {
             $errorMessage = 'Sorry for the inconvenience. We are working to resolve this issue.
             Thank you for your patience.';
-            $code         = 500;
-        } catch (BadResponseException $e){
+            $code = 500;
+        } catch (BadResponseException $e) {
             $errorMessage = 'Sorry for the inconvenience. We are working to resolve this issue.
             Thank you for your patience.';
-            $code         = 500;
-        } catch (\Exception $e){
+            $code = 500;
+        } catch (\Exception $e) {
             $errorMessage = 'Sorry for the inconvenience. We are working to resolve this issue.
             Thank you for your patience.';
-            $code         = 500;
+            $code = 500;
         } finally {
             if (isset($e) || !isset($response)) {
                 $response = MainException::handleForUser($e, array('code' => $code, 'message' => $errorMessage));
@@ -96,7 +128,7 @@ class Application
     /**
      * Creates object of controller, launches action and returns Response object.
      *
-     * @access private
+     * @access public
      *
      * @param string $controllerName
      * @param string $action
@@ -106,13 +138,13 @@ class Application
      * @throws BadControllerException
      * @return Response|string
      */
-    private function getResponse($controllerName, $action, $args)
+    public function getResponse($controllerName, $action, $args)
     {
         if (!method_exists($controllerName, $action)) {
             throw new HttpNotFoundException("Class \"$controllerName\" or action \"$action\" not exists!", 404);
         }
         $controllerRefObj = new \ReflectionClass($controllerName);
-        $parent           = $controllerRefObj->getParentClass();
+        $parent = $controllerRefObj->getParentClass();
         if (!$parent || $parent->getName() != 'Framework\Controller\Controller') {
             throw new BadControllerException("Your \"$controllerName\" class should inherit the \"Framework\\Controller\\
             Controller\" class!");

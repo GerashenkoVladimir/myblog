@@ -14,7 +14,7 @@ class Response
     /**
      * Http headers
      *
-     * @protected
+     * @access protected
      * @var array
      */
     protected $headers = array();
@@ -22,7 +22,7 @@ class Response
     /**
      * Status code
      *
-     * @protected
+     * @access protected
      * @var int
      */
     protected $statusCode;
@@ -30,7 +30,7 @@ class Response
     /**
      * Content
      *
-     * @protected
+     * @access protected
      * @var string
      */
     protected $content = '';
@@ -38,7 +38,7 @@ class Response
     /**
      * Cookies
      *
-     * @protected
+     * @access protected
      * @var array
      */
     protected $cookies = array();
@@ -46,7 +46,7 @@ class Response
     /**
      * Response constructor
      *
-     * @public
+     * @access public
      *
      * @param string $content    Content
      * @param array  $headers    Http headers
@@ -62,7 +62,7 @@ class Response
     /**
      * Sets the content
      *
-     * @public
+     * @access public
      *
      * @param $content
      *
@@ -76,7 +76,7 @@ class Response
     /**
      * Sets http header
      *
-     * @public
+     * @access public
      *
      * @param mixed $header
      *
@@ -90,7 +90,7 @@ class Response
     /**
      * Sets status code
      *
-     * @public
+     * @access public
      *
      * @param mixed $statusCode
      *
@@ -104,7 +104,7 @@ class Response
     /**
      * Sets cookie
      *
-     * @public
+     * @access public
      *
      * @param        $name
      * @param string $value
@@ -133,7 +133,7 @@ class Response
     /**
      * Sends all headers
      *
-     * @public
+     * @access public
      * @throws \Framework\Exception\ServiceException
      * @return void
      */
@@ -149,7 +149,7 @@ class Response
     /**
      * Sends all cookies
      *
-     * @public
+     * @access public
      * @return void
      */
     public function sendCookies()
@@ -163,7 +163,7 @@ class Response
     /**
      * Sends content
      *
-     * @public
+     * @access public
      * @return void
      */
     public function sendContent()
@@ -176,7 +176,7 @@ class Response
     /**
      * Sends headers, content and cookies together
      *
-     * @public
+     * @access public
      * @return void
      */
     public function send()

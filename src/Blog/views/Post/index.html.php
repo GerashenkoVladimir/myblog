@@ -14,7 +14,7 @@
     <?php } ?>
 
     <div>
-        <?php //$include('Blog\\Controller\\PostController', 'getPost', array('id' => 'TestId')) ?>
+        <?php $include('Blog\\Controller\\PostController', 'getPost', array('id' => 'TestId')) ?>
     </div>
 
 </div>
