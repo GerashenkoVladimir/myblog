@@ -1,4 +1,6 @@
 <?php
+
+//"helpers" for rendering
 return array(
     'getRoute'      => function ($route) {
         return \Framework\DI\Service::get('router')->generateURL($route);

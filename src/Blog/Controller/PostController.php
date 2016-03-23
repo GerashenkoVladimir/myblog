@@ -25,7 +25,7 @@ class PostController extends Controller
     public function addAction()
     {
         if ($this->getRequest()->isPost()) {
-            if (!$this->getRequest()->checkToken()) {
+            if (!$this->getRequest()->checkToken('token')) {
                 throw new BadTokenException('You do not have permission for this operation !', 403);
             }
             try {

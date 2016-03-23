@@ -5,26 +5,59 @@ use Framework\DataBase\DataBase;
 use Framework\DI\Service;
 use Framework\Sessions\Sessions;
 
+/**
+ * Class ActiveRecord
+ *
+ * @package Framework\Model
+ * @abstract
+ */
 abstract class ActiveRecord
 {
-    public $id;
     /**
+     * Database instance
+     *
+     * @access protected
+     * @static
+     *
      * @var DataBase
      */
     protected static $database;
 
     /**
+     * Sessions instance
+     *
+     * @access protected
+     * @static
+     *
      * @var Sessions
      */
     protected static $sessions;
 
+    /**
+     * Fields of database table
+     *
+     * @access private
+     *
+     * @var array
+     */
     private $fields = array();
 
+    /**
+     * @const
+     * @var string
+     */
     const ALL_RECORDS = 'all';
 
+    /**
+     * ActiveRecord constructor
+     *
+     * @param array $record
+     *
+     * @throws \Framework\Exception\ServiceException
+     */
     public function __construct($record = array())
     {
-        foreach ($record as $r => $value){
+        foreach ($record as $r => $value) {
             $this->$r = $value;
         }
 
@@ -36,30 +69,101 @@ abstract class ActiveRecord
     }
 
 
+    /**
+     * Returns table name. It must be overridden in the derived class
+     *
+     * @access public
+     * @static
+     *
+     * @return string
+     */
+    public static function getTable()
+    {
+        return "";
+    }
 
-    abstract public static function getTable();
-
-    abstract public static function getFieldsNames();
-
-    public function getRules(){
+    /**
+     * Returns fields of table. It must be overridden in the derived class
+     *
+     * @access public
+     * @static
+     *
+     * @return mixed
+     */
+    public static function getFieldsNames()
+    {
         return array();
     }
 
+    /**
+     * Returns validation rules. It must be overridden in the derived class
+     *
+     * @access public
+     *
+     * @return array
+     */
+    public function getRules()
+    {
+        return array();
+    }
+
+    /**
+     * Saves data in database
+     *
+     * @access public
+     *
+     * @return void
+     * @throws \Framework\Exception\DataBaseException
+     */
     public function save()
     {
         self::$database->insert(static::getTable(), static::prepareParams());
     }
 
-    public function update($param, $value)
+    /**
+     * Updates data in database
+     *
+     * @access public
+     *
+     * @param string $comparedKey
+     * @param string $comparedValue
+     *
+     * @return void
+     * @throws \Framework\Exception\DataBaseException
+     */
+    public function update($comparedKey, $comparedValue)
     {
-        self::$database->update(static::getTable(), static::prepareParams(), array($param => $value));
+        self::$database->update(static::getTable(), static::prepareParams(), array($comparedKey => $comparedValue));
     }
 
-    public function delete($param, $value)
+    /**
+     * Deletes data from database
+     *
+     * @access public
+     *
+     * @param string $compareKey
+     * @param string $comparedValue
+     *
+     * @return void
+     * @throws \Framework\Exception\DataBaseException
+     */
+    public function delete($compareKey, $comparedValue)
     {
-        self::$database->delete(static::getTable(),array($param => $value));
+        self::$database->delete(static::getTable(), array($compareKey => $comparedValue));
     }
 
+    /**
+     * Find and return records from database by param
+     *
+     * @access public
+     * @static
+     *
+     * @param string $record
+     *
+     * @return array|ActiveRecord
+     * @throws \Framework\Exception\DataBaseException
+     * @throws \Framework\Exception\ServiceException
+     */
     public static function find($record)
     {
         if (!isset(static::$database)) {
@@ -81,6 +185,13 @@ abstract class ActiveRecord
         }
     }
 
+    /**
+     * Prepares params for saving
+     *
+     * @access private
+     *
+     * @return array
+     */
     private function prepareParams()
     {
         $preparedParams = array();

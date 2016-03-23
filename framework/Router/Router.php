@@ -12,19 +12,50 @@ use Framework\DI\Service;
  */
 class Router
 {
+    /**
+     * Route map
+     *
+     * @access private
+     *
+     * @var array
+     */
     private $routes;
 
+    /**
+     * Ready route
+     *
+     * @access public
+     *
+     * @var array
+     */
     private $readyRoute;
 
+    /**
+     * Router constructor
+     *
+     * @access public
+     *
+     * @throws \Framework\Exception\ServiceException
+     */
     public function __construct()
     {
         $this->routes   = Service::get('config')['routes'];
     }
 
+    /**
+     * Generate URL from $routes
+     *
+     * @access public
+     *
+     * @param string $routeName
+     *
+     * @return string
+     * @throws \Framework\Exception\ServiceException
+     */
     public function generateURL($routeName)
     {
-        if (isset(Service::get('config')['routes'][$routeName]['pattern'])) {
-            return "http://".Service::get('request')->getHTTPHost().Service::get('config')['routes'][$routeName]['pattern'];
+        if (isset($this->routes[$routeName]['pattern'])) {
+            return "http://".Service::get('request')->getHTTPHost().$this->routes[$routeName]['pattern'];
         } else {
             return '';
         }
@@ -41,8 +72,6 @@ class Router
     public function getRoute()
     {
         $uri = Service::get('request')->getUri();
-
-        $this->routes = Service::get('config')['routes'];
 
         $matchedRoutes = array();
 
@@ -67,6 +96,13 @@ class Router
         );
     }
 
+    /**
+     * Returns ready route
+     *
+     * @access public
+     *
+     * @return null|array
+     */
     public function getReadyRoute()
     {
         return isset($this->readyRoute) ? $this->readyRoute : null;

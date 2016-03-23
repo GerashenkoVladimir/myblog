@@ -3,10 +3,11 @@
 namespace Framework\Inheritance;
 
 /**
- * Abstract class Singleton
+ * Class Singleton
  * Implements pattern Singleton. Create and return object variable
  *
  * @package Framework\Inheritance
+ * @abstract
  */
 abstract class Singleton
 {
@@ -36,16 +37,28 @@ abstract class Singleton
         return static::$_instance[$class];
     }
 
-
+    /**
+     * Singleton constructor
+     *
+     * @access protected
+     */
     protected function __construct(){
 
     }
 
-    protected function __clone()
+    /**
+     * @final
+     * @access protected
+     */
+    final protected function __clone()
     {
     }
 
-    protected function __wakeup()
+    /**
+     * @final
+     * @access protected
+     */
+    final protected function __wakeup()
     {
     }
 }

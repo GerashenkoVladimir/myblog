@@ -7,8 +7,20 @@ use Framework\DI\Service;
 use Framework\Renderer\Renderer;
 use Framework\Response\Response;
 
+/**
+ * Class MainException
+ * @package Framework\Exception
+ */
 class MainException extends \Exception
 {
+    /**
+     * Saves exception log in log file
+     *
+     * @access public
+     *
+     * @return void
+     * @throws ServiceException
+     */
     public function saveExceptionLog()
     {
         $date = date('Y-m-d H:i:s (T)');
@@ -34,6 +46,18 @@ class MainException extends \Exception
         }
     }
 
+    /**
+     * Handles exception for user
+     *
+     * @access public
+     * @static
+     *
+     * @param \Exception $exception
+     * @param array      $messages
+     *
+     * @return Response
+     * @throws ServiceException
+     */
     public static function handleForUser(\Exception $exception, $messages = array())
     {
         if ($exception == null) {

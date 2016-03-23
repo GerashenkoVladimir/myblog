@@ -1,28 +1,37 @@
 <?php
 namespace Framework\ErrorHandler;
 
-use Framework\DI\Service;
-use Framework\Renderer\Renderer;
-use Framework\Response\Response;
-
+/**
+ * Class ErrorHandler
+ *
+ * @package Framework\ErrorHandler
+ */
 class ErrorHandler
 {
+    /**
+     * Registers custom error handler
+     *
+     * @access public
+     * @static
+     *
+     * @return void
+     */
     public static function loadErrorHandler()
     {
-        set_error_handler(function($errno,$errmsg, $filename,$linenum){
+        set_error_handler(function ($errno, $errmsg, $filename, $linenum) {
             $date = date('Y-m-d H:i:s (T)');
-            if(!file_exists(__DIR__ . '/../../app/logs/')){
+            if (!file_exists(__DIR__ . '/../../app/logs/')) {
                 mkdir(__DIR__ . '/../../app/logs/');
             }
 
-            $f = fopen(__DIR__.'/../../app/logs/errorlog.txt','a');
+            $f = fopen(__DIR__ . '/../../app/logs/errorlog.txt', 'a');
             if (!empty($f)) {
                 $error = "____________________________________________________________\n";
-                $error .= $date."\n";
-                $error .= $errno."\n";
-                $error .= $errmsg."\n";
-                $error .= $filename."\n";
-                $error .= $linenum."\n";
+                $error .= $date . "\n";
+                $error .= $errno . "\n";
+                $error .= $errmsg . "\n";
+                $error .= $filename . "\n";
+                $error .= $linenum . "\n";
                 $error .= "____________________________________________________________\n";
                 fwrite($f, $error);
                 fclose($f);

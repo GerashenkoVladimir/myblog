@@ -68,8 +68,43 @@ class Request
      */
     private $postData = array();
 
+    /**
+     * An associative array that contains the $_COOKIE array.
+     *
+     * @access private
+     * @var array|string
+     */
     private $cookieData = array();
 
+    /**
+     * Filter 'string' mode
+     *
+     * @const
+     * @var string
+     */
+    const STRING = 'string';
+
+    /**
+     * Filter 'int' mode
+     *
+     * @const
+     * @var string
+     */
+    const INT = 'int';
+
+    /**
+     * Filter 'skip' mode
+     *
+     * @const
+     * @var string
+     */
+    const SKIP_FILTER = 'skip';
+
+    /**
+     * Request constructor
+     *
+     * @access public
+     */
     public function __construct()
     {
         $this->allHeaders = getallheaders();
@@ -77,16 +112,18 @@ class Request
         $this->requestMethod = $_SERVER['REQUEST_METHOD'];
         $this->serverProtocol = $_SERVER['SERVER_PROTOCOL'];
         $this->httpHost = $_SERVER['HTTP_HOST'];
-        $this->getData = $this->sanitizeData($_GET);
-        $this->postData = $this->sanitizeData($_POST);
-        $this->cookieData = $this->sanitizeData($_COOKIE);
+        $this->getData = $this->cleanData($_GET);
+        $this->postData = $this->cleanData($_POST);
+        $this->cookieData = $this->cleanData($_COOKIE);
     }
 
     /**
      * Returns headers of http request.
      *
      * @access public
+     *
      * @param string|null $key
+     *
      * @return array|string|null
      */
     public function getHeaders($key = null)
@@ -102,6 +139,7 @@ class Request
      * Returns method of http request.
      *
      * @access public
+     *
      * @return string
      */
     public function getRequestMethod()
@@ -113,6 +151,7 @@ class Request
      * Return "true" if request method is POST
      *
      * @access public
+     *
      * @return boolean
      */
     public function isPost()
@@ -124,6 +163,7 @@ class Request
      * Return "true" if request method is GET
      *
      * @access public
+     *
      * @return boolean
      */
     public function isGet()
@@ -135,6 +175,7 @@ class Request
      * Returns "true" if request is "ajax"
      *
      * @access public
+     *
      * @return boolean
      */
     public function isAjax()
@@ -146,6 +187,7 @@ class Request
      * Returns server protocol.
      *
      * @access public
+     *
      * @return string
      */
     public function getServerProtocol()
@@ -157,6 +199,7 @@ class Request
      * Returns HTTP host
      *
      * @access public
+     *
      * @return string
      */
     public function getHTTPHost()
@@ -168,7 +211,9 @@ class Request
      * Returns data of $_GET array.
      *
      * @access public
+     *
      * @param string|null $key
+     *
      * @return array|string|null
      */
     public function get($key = null)
@@ -184,7 +229,9 @@ class Request
      * Returns data of $_POST array.
      *
      * @access public
+     *
      * @param string|null $key
+     *
      * @return array|string|null
      */
     public function post($key = null)
@@ -200,6 +247,7 @@ class Request
      * Returns request URI.
      *
      * @access public
+     *
      * @return string
      */
     public function getUri()
@@ -207,25 +255,65 @@ class Request
         return $this->uri;
     }
 
-    public function checkToken()
+    /**
+     * Checks token
+     *
+     * @param string $token
+     *
+     * @return bool
+     * @throws \Framework\Exception\ServiceException
+     */
+    public function checkToken($token)
     {
-        return $this->post('token') == Service::get('session')->get('token');
+        return $this->post($token) == Service::get('session')->get($token);
     }
 
-    private function sanitizeData($data)
+    //доделать!!!
+    /*private function filter($var, $mode = Request::STRING, $toClean = true)
+    {
+        if ($toClean) {
+            $var = $this->cleanString($var);
+        }
+
+        if ($mode == Request::SKIP_FILTER) {
+            return $var;
+        }else if($mode == Request::STRING){
+            return (string)$var;
+        }
+    }*/
+
+    /**
+     * Clean data from all "dangerous" characters
+     *
+     * @access private
+     *
+     * @param array|string $data
+     *
+     * @return array|string
+     */
+    private function cleanData($data)
     {
         if (is_array($data)) {
             foreach ($data as $key => $value) {
-                $value = $this->sanitizeString($value);
+                $value = $this->cleanString($value);
             }
         } else {
-            $data = $this->sanitizeString($data);
+            $data = $this->cleanString($data);
         }
 
         return $data;
     }
 
-    private function sanitizeString($data)
+    /**
+     * Clean string from all "dangerous" characters
+     *
+     * @access private
+     *
+     * @param string $data
+     *
+     * @return string
+     */
+    private function cleanString($data)
     {
         $data = stripslashes($data);
         $data = htmlentities($data);

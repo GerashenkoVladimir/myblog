@@ -48,12 +48,17 @@ class DataBase extends Singleton
         return static::$_instance[$class];
     }
 
+    /**
+     * DataBase constructor
+     *
+     * @throws \Framework\Exception\ServiceException
+     */
     protected function __construct()
     {
         $this->dbConfig = Service::get('config')['pdo'];
-        try{
+        try {
             $this->connection = new \PDO($this->dbConfig['dns'], $this->dbConfig['user'], $this->dbConfig['password']);
-        } catch (\PDOException $e){
+        } catch (\PDOException $e) {
             echo "<pre>$e</pre>";
         }
     }
@@ -77,7 +82,7 @@ class DataBase extends Singleton
 
         $queryString = "SELECT * FROM $table";
         $queryString = $this->getOrderBy($queryString, $orderBy);
-        $result      = $this->connection->query($queryString);
+        $result = $this->connection->query($queryString);
         if (!$result) {
             throw new DataBaseException('Bad request to database!');
         }
@@ -108,7 +113,7 @@ class DataBase extends Singleton
 
         $readyDisplayString = '';
         foreach ($displayParam as $param) {
-            $readyDisplayString .= $param.', ';
+            $readyDisplayString .= $param . ', ';
         }
         $readyDisplayString = rtrim($readyDisplayString, ', ');
 
@@ -120,7 +125,7 @@ class DataBase extends Singleton
         $pdoStatement = $this->connection->prepare($queryString);
         $pdoStatement->execute($readyCompareData['values']);
         $result = $pdoStatement->fetchAll(\PDO::FETCH_ASSOC);
-        if (count($result) > 1 || count($result) == 0){
+        if (count($result) > 1 || count($result) == 0) {
             return $result;
         }
 
@@ -143,10 +148,10 @@ class DataBase extends Singleton
         if (!is_string($table) || !is_array($data)) {
             throw new DataBaseException('Error! Wrong type of parameters $table or $data!');
         }
-        $readyData    = $this->prepareInsertData($data);
-        $queryString  = "INSERT INTO $table ({$readyData['params']}) VALUES ({$readyData['placeholders']})";
+        $readyData = $this->prepareInsertData($data);
+        $queryString = "INSERT INTO $table ({$readyData['params']}) VALUES ({$readyData['placeholders']})";
         $pdoStatement = $this->connection->prepare($queryString);
-        if(!$pdoStatement->execute($readyData['values'])){
+        if (!$pdoStatement->execute($readyData['values'])) {
             throw new DatabaseException('This record already exists!');
         }
     }
@@ -168,11 +173,11 @@ class DataBase extends Singleton
         if (!is_string($table) || !is_array($updateData) || !is_array($compareData)) {
             throw new DataBaseException('Error! Wrong type of parameters $table, $updateData or $compareDate!');
         }
-        $readyUpdateData  = $this->prepareData($updateData, ', ');
+        $readyUpdateData = $this->prepareData($updateData, ', ');
         $readyCompareData = $this->prepareData($compareData, ' AND ');
-        $values           = array_merge($readyUpdateData['values'], $readyCompareData['values']);
-        $queryString      = "UPDATE $table SET {$readyUpdateData['placeholderString']} WHERE {$readyCompareData['placeholderString']}";
-        $pdoStatement     = $this->connection->prepare($queryString);
+        $values = array_merge($readyUpdateData['values'], $readyCompareData['values']);
+        $queryString = "UPDATE $table SET {$readyUpdateData['placeholderString']} WHERE {$readyCompareData['placeholderString']}";
+        $pdoStatement = $this->connection->prepare($queryString);
         $pdoStatement->execute($values);
     }
 
@@ -191,8 +196,8 @@ class DataBase extends Singleton
             throw new DataBaseException('Error! Wrong type of parameters $table or $compareData!');
         }
         $readyCompareData = $this->prepareData($comparedData, ' AND ');
-        $queryString      = "DELETE FROM $table WHERE {$readyCompareData['placeholderString']}";
-        $pdoStatement     = $this->connection->prepare($queryString);
+        $queryString = "DELETE FROM $table WHERE {$readyCompareData['placeholderString']}";
+        $pdoStatement = $this->connection->prepare($queryString);
         $pdoStatement->execute($readyCompareData['values']);
     }
 
@@ -230,15 +235,15 @@ class DataBase extends Singleton
         );
 
         foreach ($data as $param => $value) {
-            $readyData['params'] .= $param.', ';
+            $readyData['params'] .= $param . ', ';
             array_push($readyData['values'], $value);
         }
 
         $readyData['params'] = rtrim($readyData['params'], ', ');
 
         $readyData['placeholders'] = '';
-        $count                     = count($data);
-        for ($i = 1;$i <= $count;$i++) {
+        $count = count($data);
+        for ($i = 1; $i <= $count; $i++) {
             $readyData['placeholders'] .= '?, ';
         }
         $readyData['placeholders'] = rtrim($readyData['placeholders'], ', ');
@@ -262,7 +267,7 @@ class DataBase extends Singleton
         );
 
         foreach ($data as $param => $value) {
-            $readyData['placeholderString'] .= $param.'=?'.$separator;
+            $readyData['placeholderString'] .= $param . '=?' . $separator;
             array_push($readyData['values'], $value);
         }
 

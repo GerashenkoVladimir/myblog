@@ -106,7 +106,7 @@ class Response
      *
      * @access public
      *
-     * @param        $name
+     * @param string $name
      * @param string $value
      * @param int    $expire
      * @param string $path
@@ -134,6 +134,7 @@ class Response
      * Sends all headers
      *
      * @access public
+     *
      * @throws \Framework\Exception\ServiceException
      * @return void
      */
@@ -150,6 +151,7 @@ class Response
      * Sends all cookies
      *
      * @access public
+     *
      * @return void
      */
     public function sendCookies()
@@ -164,6 +166,7 @@ class Response
      * Sends content
      *
      * @access public
+     *
      * @return void
      */
     public function sendContent()
@@ -177,6 +180,7 @@ class Response
      * Sends headers, content and cookies together
      *
      * @access public
+     *
      * @return void
      */
     public function send()

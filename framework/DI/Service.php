@@ -3,45 +3,120 @@ namespace Framework\DI;
 
 use Framework\Exception\ServiceException;
 
+/**
+ * Class Service
+ * @package Framework\DI
+ */
 class Service
 {
+    /**
+     * An associative array that contains class names, objects or closures
+     *
+     * @access private
+     * @static
+     *
+     * @var array
+     */
     private static $definitions = array();
+
+    /**
+     * An associative array that contains class names, objects or closures that must be in single copy
+     *
+     * @access private
+     *
+     * @var array
+     */
     private static $singlDefinitions = array();
+
+    /**
+     * An associative array that contains arguments that used in creating services
+     *
+     * @access private
+     * @static
+     *
+     * @var array
+     */
     private static $params = array();
+
+    /**
+     * An associative array that contains simple data(array, string or something else)
+     *
+     * @access private
+     * @static
+     *
+     * @var array
+     */
     private static $simpleDefinitions = array();
 
-    public static function set($class, $definition , array $params = array())
+    /**
+     * Sets services
+     *
+     * @access public
+     * @static
+     *
+     * @param string                 $serviceName Alias
+     * @param string|\Closure|object $definition
+     * @param array                  $params      Dependencies or arguments
+     *
+     * @return void
+     * @throws ServiceException
+     */
+    public static function set($serviceName, $definition, array $params = array())
     {
-        if (!$definition instanceof \Closure && !is_object($definition) && !is_string($definition)){
+        if (!$definition instanceof \Closure && !is_object($definition) && !is_string($definition)) {
             throw new ServiceException('The parameter specified at registration should be based object,
              closure or class name!');
         }
-        if (isset(self::$singlDefinitions[$class])) {
-            unset(self::$singlDefinitions[$class]);
-        } elseif (isset(self::$simpleDefinitions[$class])) {
-            unset(self::$simpleDefinitions[$class]);
+        if (isset(self::$singlDefinitions[$serviceName])) {
+            unset(self::$singlDefinitions[$serviceName]);
+        } elseif (isset(self::$simpleDefinitions[$serviceName])) {
+            unset(self::$simpleDefinitions[$serviceName]);
         }
-        self::$definitions[$class] = $definition;
-        self::$params[$class] = $params;
+        self::$definitions[$serviceName] = $definition;
+        self::$params[$serviceName] = $params;
     }
 
-    public static function setSingleton($class, $definition , array $params = array())
+    /**
+     * Sets singleton services
+     *
+     * @access public
+     * @static
+     *
+     * @param string                 $serviceName Alias
+     * @param string|\Closure|object $definition
+     * @param array                  $params      Dependencies or arguments
+     *
+     * @return void
+     * @throws ServiceException
+     */
+    public static function setSingleton($serviceName, $definition, array $params = array())
     {
-        if (!$definition instanceof \Closure && !is_object($definition) && !is_string($definition)){
+        if (!$definition instanceof \Closure && !is_object($definition) && !is_string($definition)) {
             throw new ServiceException('The parameter specified at registration should be based object,
              closure or class name!');
         }
 
-        if (isset(self::$definitions[$class])) {
-            unset(self::$definitions[$class]);
-        } elseif (isset(self::$simpleDefinitions[$class])) {
-            unset(self::$simpleDefinitions[$class]);
+        if (isset(self::$definitions[$serviceName])) {
+            unset(self::$definitions[$serviceName]);
+        } elseif (isset(self::$simpleDefinitions[$serviceName])) {
+            unset(self::$simpleDefinitions[$serviceName]);
         }
-        self::$singlDefinitions[$class] = $definition;
-        self::$params[$class] = $params;
+        self::$singlDefinitions[$serviceName] = $definition;
+        self::$params[$serviceName] = $params;
 
     }
 
+    /**
+     * Sets simple services
+     *
+     * @access public
+     * @static
+     *
+     * @param string $serviceName Alias
+     * @param mixed  $data        Service
+     *
+     * @return void
+     */
     public static function setSimple($serviceName, $data)
     {
         if (isset(self::$definitions[$serviceName])) {
@@ -52,22 +127,35 @@ class Service
         self::$simpleDefinitions[$serviceName] = $data;
     }
 
-    public static function get($class, $params = array())
+    /**
+     * Returns service
+     *
+     * @access public
+     * @static
+     *
+     * @param string $serviceName Service name
+     * @param array  $params
+     *
+     * @return mixed|object
+     * @throws ServiceException
+     */
+    public static function get($serviceName, $params = array())
     {
-       if (!isset(self::$definitions[$class]) && !isset(self::$singlDefinitions[$class])
-           && !isset(self::$simpleDefinitions[$class])) {
-            throw new ServiceException("Service '$class' is not registered!");
+        if (!isset(self::$definitions[$serviceName]) && !isset(self::$singlDefinitions[$serviceName])
+            && !isset(self::$simpleDefinitions[$serviceName])
+        ) {
+            throw new ServiceException("Service '$serviceName' is not registered!");
         }
 
-        if ($isSingleton = isset(self::$singlDefinitions[$class])) {
-            $definition = self::$singlDefinitions[$class];
-        } elseif (isset(self::$definitions[$class])) {
-            $definition = self::$definitions[$class];
+        if ($isSingleton = isset(self::$singlDefinitions[$serviceName])) {
+            $definition = self::$singlDefinitions[$serviceName];
+        } elseif (isset(self::$definitions[$serviceName])) {
+            $definition = self::$definitions[$serviceName];
         } else {
-            return self::$simpleDefinitions[$class];
+            return self::$simpleDefinitions[$serviceName];
         }
 
-        $args = self::getArgs($class,$params);
+        $args = self::getArgs($serviceName, $params);
 
         if ($definition instanceof \Closure) {
             return self::useClosure($definition, $args);
@@ -77,7 +165,7 @@ class Service
             $classRefObj = new \ReflectionClass($definition);
 
             if ($isSingleton) {
-                return self::$singlDefinitions[$class] = $classRefObj->newInstanceArgs($args);
+                return self::$singlDefinitions[$serviceName] = $classRefObj->newInstanceArgs($args);
             }
 
             return $classRefObj->newInstanceArgs($args);
@@ -86,12 +174,24 @@ class Service
         throw new ServiceException("Class $definition is not exists!");
     }
 
-    private static function getArgs($class, $params)
+    /**
+     * Returns the arguments using the alias
+     *
+     * @access private
+     * @static
+     *
+     * @param string $serviceName Alias
+     * @param array  $params      Arguments
+     *
+     * @return array
+     * @throws ServiceException
+     */
+    private static function getArgs($serviceName, $params)
     {
         if (empty($params)) {
 
             $args = array();
-            foreach (self::$params[$class] as $param) {
+            foreach (self::$params[$serviceName] as $param) {
                 $args[] = self::get($param);
             }
         } else {
@@ -101,8 +201,19 @@ class Service
         return $args;
     }
 
-    private function useClosure($definition, $params = array())
+    /**
+     * Uses closure function
+     *
+     * @access private
+     * @static
+     *
+     * @param \Closure $definition
+     * @param array    $params
+     *
+     * @return mixed
+     */
+    private static function useClosure($definition, $params = array())
     {
-        return call_user_func_array($definition,$params);
+        return call_user_func_array($definition, $params);
     }
 }
