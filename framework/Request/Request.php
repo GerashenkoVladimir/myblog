@@ -258,14 +258,16 @@ class Request
     /**
      * Checks token
      *
-     * @param string $token
+     * @param string $tokenName
      *
      * @return bool
      * @throws \Framework\Exception\ServiceException
      */
-    public function checkToken($token)
+    public function checkToken($tokenName)
     {
-        return $this->post($token) == Service::get('session')->get($token);
+        $sessionToken = Service::get('session')->get($tokenName);
+        Service::get('session')->unsetParam($tokenName);
+        return $this->post($tokenName) == $sessionToken;
     }
 
     //доделать!!!

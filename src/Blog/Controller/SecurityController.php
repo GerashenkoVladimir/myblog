@@ -8,9 +8,21 @@ use Framework\DI\Service;
 use Framework\Exception\DatabaseException;
 use Framework\Response\ResponseRedirect;
 
+/**
+ * Class SecurityController
+ * @package Blog\Controller
+ */
 class SecurityController extends Controller
 {
 
+    /**
+     * Login user action
+     *
+     * @access public
+     *
+     * @return \Framework\Response\Response|ResponseRedirect
+     * @throws \Framework\Exception\ServiceException
+     */
     public function loginAction()
     {
         if (Service::get('security')->isAuthenticated()) {
@@ -35,6 +47,14 @@ class SecurityController extends Controller
         return $this->render('login.html', array('errors' => $errors));
     }
 
+    /**
+     * Logout user action
+     *
+     * @access public
+     *
+     * @return ResponseRedirect
+     * @throws \Framework\Exception\ServiceException
+     */
     public function logoutAction()
     {
         Service::get('security')->clear();
@@ -42,6 +62,14 @@ class SecurityController extends Controller
         return $this->redirect($this->generateRoute('home'));
     }
 
+    /**
+     * Registration user action
+     *
+     * @access public
+     *
+     * @return \Framework\Response\Response|ResponseRedirect
+     * @throws \Framework\Exception\ServiceException
+     */
     public function signinAction()
     {
         if (Service::get('security')->isAuthenticated()) {

@@ -10,18 +10,46 @@ use Framework\Exception\HttpNotFoundException;
 use Framework\Response\Response;
 use Framework\Validation\Validator;
 
+/**
+ * Class PostController
+ * @package Blog\Controller
+ */
 class PostController extends Controller
 {
+    /**
+     * Index Action
+     *
+     * @access public
+     *
+     * @return Response
+     */
     public function indexAction()
     {
         return $this->render('index.html', array('posts' => Post::find('all')));
     }
 
+    /**
+     * Get post action
+     *
+     * @access public
+     *
+     * @param int $id Post id
+     *
+     * @return Response
+     */
     public function getPostAction($id)
     {
         return new Response('Post: #' . $id);
     }
 
+    /**
+     * Add post action
+     *
+     * @access public
+     *
+     * @return Response|\Framework\Response\ResponseRedirect
+     * @throws BadTokenException
+     */
     public function addAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -54,6 +82,14 @@ class PostController extends Controller
         );
     }
 
+    /**
+     * Show post action
+     *
+     * @param int $id Post id
+     *
+     * @return Response
+     * @throws HttpNotFoundException
+     */
     public function showAction($id)
     {
         if (!$post = Post::find((int)$id)) {

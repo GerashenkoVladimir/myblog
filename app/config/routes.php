@@ -77,33 +77,5 @@ return array(
             'id'      => '\d+',
             '_method' => 'POST'
         )
-
-    ),
-    'my_route_args'  => array(
-        '_name'      => 'my_route_args',
-        'pattern'       => '/my_route/{id}/{name}',
-        'controller'    => 'Blog\\Controller\\MyController',
-        'action'        => 'my',
-        '_requirements' => array(
-            'id'   => '\d+',
-            'name' => '\w+',
-        )
-    ),
-    'my_route_post'  => array(
-        '_name'      => 'my_route_post',
-        'pattern'       => '/my_route/{id}/{name}',
-        'controller'    => 'Blog\\Controller\\MyController',
-        'action'        => 'post',
-        '_requirements' => array(
-            '_method' => 'POST',
-            'id'      => '\d+',
-            'name'    => '\w+',
-        )
-    ),
-    'my_route'       => array(
-        '_name'      => 'my_route',
-        'pattern'    => '/my_route',
-        'controller' => 'Blog\\Controller\\MyController',
-        'action'     => 'simple',
     ),
 );
