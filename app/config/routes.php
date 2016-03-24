@@ -2,36 +2,43 @@
 
 return array(
     'home'           => array(
+        '_name'      => 'home',
         'pattern'    => '/',
         'controller' => 'Blog\\Controller\\PostController',
         'action'     => 'index'
     ),
     'testredirect'   => array(
+        '_name'      => 'testredirect',
         'pattern'    => '/test_redirect',
         'controller' => 'Blog\\Controller\\TestController',
         'action'     => 'redirect',
     ),
-    'test_json' => array(
+    'test_json'      => array(
+        '_name'      => 'test_json',
         'pattern'    => '/test_json',
         'controller' => 'Blog\\Controller\\TestController',
         'action'     => 'getJson',
     ),
     'signin'         => array(
+        '_name'      => 'signin',
         'pattern'    => '/signin',
         'controller' => 'Blog\\Controller\\SecurityController',
         'action'     => 'signin'
     ),
     'login'          => array(
+        '_name'      => 'login',
         'pattern'    => '/login',
         'controller' => 'Blog\\Controller\\SecurityController',
         'action'     => 'login'
     ),
     'logout'         => array(
+        '_name'      => 'logout',
         'pattern'    => '/logout',
         'controller' => 'Blog\\Controller\\SecurityController',
         'action'     => 'logout'
     ),
     'update_profile' => array(
+        '_name'      => 'update_profile',
         'pattern'       => '/profile',
         'controller'    => 'CMS\\Controller\\ProfileController',
         'action'        => 'update',
@@ -40,17 +47,20 @@ return array(
         )
     ),
     'profile'        => array(
+        '_name'      => 'profile',
         'pattern'    => '/profile',
         'controller' => 'CMS\\Controller\\ProfileController',
         'action'     => 'get'
     ),
     'add_post'       => array(
+        '_name'      => 'add_post',
         'pattern'    => '/posts/add',
         'controller' => 'Blog\\Controller\\PostController',
         'action'     => 'add',
         'security'   => array('ROLE_USER'),
     ),
     'show_post'      => array(
+        '_name'      => 'show_post',
         'pattern'       => '/posts/{id}',
         'controller'    => 'Blog\\Controller\\PostController',
         'action'        => 'show',
@@ -59,6 +69,7 @@ return array(
         )
     ),
     'edit_post'      => array(
+        '_name'      => 'edit_post',
         'pattern'       => '/posts/{id}/edit',
         'controller'    => 'CMS\\Controller\\BlogController',
         'action'        => 'edit',
@@ -66,6 +77,5 @@ return array(
             'id'      => '\d+',
             '_method' => 'POST'
         )
-
-    )
+    ),
 );

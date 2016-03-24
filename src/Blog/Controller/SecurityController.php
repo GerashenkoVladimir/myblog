@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dgilan
- * Date: 10/17/14
- * Time: 12:41 PM
- */
 
 namespace Blog\Controller;
 
@@ -14,9 +8,21 @@ use Framework\DI\Service;
 use Framework\Exception\DatabaseException;
 use Framework\Response\ResponseRedirect;
 
+/**
+ * Class SecurityController
+ * @package Blog\Controller
+ */
 class SecurityController extends Controller
 {
 
+    /**
+     * Login user action
+     *
+     * @access public
+     *
+     * @return \Framework\Response\Response|ResponseRedirect
+     * @throws \Framework\Exception\ServiceException
+     */
     public function loginAction()
     {
         if (Service::get('security')->isAuthenticated()) {
@@ -25,13 +31,13 @@ class SecurityController extends Controller
         $errors = array();
 
         if ($this->getRequest()->isPost()) {
-
             if ($user = User::findByEmail($this->getRequest()->post('email'))) {
                 if ($user->password == $this->getRequest()->post('password')) {
                     Service::get('security')->setUser($user);
                     $returnUrl = Service::get('session')->returnUrl;
                     unset(Service::get('session')->returnUrl);
-                    return $this->redirect(!is_null($returnUrl)?$returnUrl:$this->generateRoute('home'));
+
+                    return $this->redirect(!is_null($returnUrl) ? $returnUrl : $this->generateRoute('home'));
                 }
             }
 
@@ -41,12 +47,29 @@ class SecurityController extends Controller
         return $this->render('login.html', array('errors' => $errors));
     }
 
+    /**
+     * Logout user action
+     *
+     * @access public
+     *
+     * @return ResponseRedirect
+     * @throws \Framework\Exception\ServiceException
+     */
     public function logoutAction()
     {
         Service::get('security')->clear();
+
         return $this->redirect($this->generateRoute('home'));
     }
 
+    /**
+     * Registration user action
+     *
+     * @access public
+     *
+     * @return \Framework\Response\Response|ResponseRedirect
+     * @throws \Framework\Exception\ServiceException
+     */
     public function signinAction()
     {
         if (Service::get('security')->isAuthenticated()) {
@@ -55,14 +78,15 @@ class SecurityController extends Controller
         $errors = array();
 
         if ($this->getRequest()->isPost()) {
-            try{
-                $user           = new User();
-                $user->email    = $this->getRequest()->post('email');
+            try {
+                $user = new User();
+                $user->email = $this->getRequest()->post('email');
                 $user->password = $this->getRequest()->post('password');
-                $user->role     = 'ROLE_USER';
+                $user->role = 'ROLE_USER';
                 $user->save();
+
                 return $this->redirect($this->generateRoute('home'));
-            } catch(DatabaseException $e){
+            } catch (DatabaseException $e) {
                 $errors = array($e->getMessage());
             }
         }

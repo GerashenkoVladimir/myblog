@@ -1,1 +1,8 @@
 /.idea
+/indexTest.php
+/app/config/dbConfig.php
+/test.php
+/framework/Registry
+/app/logs/errorlog.txt
+/app/logs/exceptionLog.txt
+/web/.htaccess1
