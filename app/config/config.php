@@ -2,7 +2,7 @@
 
 return array(
     //Modes of of the framework
-    'mode'        => 'dev', //user|dev
+    'mode'        => 'user', //user|dev
     //Route map
     'routes'      => include('routes.php'),
     //The directory that contains templates
