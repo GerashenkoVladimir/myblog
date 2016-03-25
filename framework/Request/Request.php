@@ -3,6 +3,7 @@
 namespace Framework\Request;
 
 use Framework\DI\Service;
+use Framework\Exception\RequestExceptions;
 
 /**
  * Class Request
@@ -270,19 +271,33 @@ class Request
         return $this->post($tokenName) == $sessionToken;
     }
 
-    //доделать!!!
-    /*private function filter($var, $mode = Request::STRING, $toClean = true)
+    private function filter($var, $filterMode = Request::STRING, $toClean = true)
     {
         if ($toClean) {
             $var = $this->cleanString($var);
         }
 
-        if ($mode == Request::SKIP_FILTER) {
+        if ($filterMode == Request::SKIP_FILTER) {
             return $var;
-        }else if($mode == Request::STRING){
-            return (string)$var;
+        } elseif ($filterMode == Request::STRING) {
+            if (!preg_match('/[\w@-]+$/u',$var)) {
+                $message = 'Please enter the letters, numbers or symbols @ , - , _!';
+            }
+        } elseif ($filterMode == Request::INT) {
+            if (!preg_match('/^\d+$/', $var)) {
+                $message = 'Please enter the numbers!';
+            }
+        } else {
+            if (!preg_match('/'.$filterMode.'/', $var)) {
+                $message = 'You have entered the wrong data';
+            }
         }
-    }*/
+
+        if (isset($message)) {
+            throw new RequestExceptions($message);
+        }
+        return $var;
+    }
 
     /**
      * Clean data from all "dangerous" characters
