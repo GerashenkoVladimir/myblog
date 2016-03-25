@@ -83,7 +83,7 @@ class Request
      * @const
      * @var string
      */
-    const STRING = 'string';
+    const FILTER_STRING = 'string';
 
     /**
      * Filter 'int' mode
@@ -91,7 +91,19 @@ class Request
      * @const
      * @var string
      */
-    const INT = 'int';
+    const FILTER_INT = 'int';
+
+    Private $filterBag = array(
+        Request::FILTER_STRING => array(
+            'pattern' => '/[\w@-]+$/u',
+            'message' => 'Please enter the letters, numbers or symbols @ , - , _!'
+            ),
+        Request::FILTER_INT => array(
+            'pattern' => '/^\d+$/',
+            'message' => 'Please enter the numbers!'
+        ),
+        'defaultMessage' => 'You have entered the wrong data'
+    );
 
     /**
      * Filter 'skip' mode
@@ -271,31 +283,24 @@ class Request
         return $this->post($tokenName) == $sessionToken;
     }
 
-    private function filter($var, $filterMode = Request::STRING, $toClean = true)
+    private function filter($var, $filterMode = Request::FILTER_STRING, $toClean = true)
     {
         if ($toClean) {
             $var = $this->cleanString($var);
         }
 
-        if ($filterMode == Request::SKIP_FILTER) {
-            return $var;
-        } elseif ($filterMode == Request::STRING) {
-            if (!preg_match('/[\w@-]+$/u',$var)) {
-                $message = 'Please enter the letters, numbers or symbols @ , - , _!';
-            }
-        } elseif ($filterMode == Request::INT) {
-            if (!preg_match('/^\d+$/', $var)) {
-                $message = 'Please enter the numbers!';
-            }
-        } else {
-            if (!preg_match('/'.$filterMode.'/', $var)) {
-                $message = 'You have entered the wrong data';
+        if (!$filterMode == Request::SKIP_FILTER) {
+            if (array_key_exists($filterMode, $this->filterBag)) {
+                if (!preg_match($this->filterBag[$filterMode]['pattern'], $var)) {
+                    throw new RequestExceptions($this->filterBag[$filterMode]['message']);
+                }
+            } else {
+                if (!preg_match($filterMode, $var)) {
+                    throw new RequestExceptions($this->filterBag['defaultMessage']);
+                }
             }
         }
 
-        if (isset($message)) {
-            throw new RequestExceptions($message);
-        }
         return $var;
     }
 
