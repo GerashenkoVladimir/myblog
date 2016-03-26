@@ -226,16 +226,18 @@ class Request
      * @access public
      *
      * @param string|null $key
+     * @param string      $filterMode
+     * @param bool        $toClean
      *
-     * @return array|string|null
+     * @return array|null|string
      */
-    public function get($key = null)
+    public function get($key = null,  $filterMode = Request::FILTER_STRING, $toClean = true)
     {
         if ($key == null) {
             return $this->getData;
         }
 
-        return isset($this->getData[$key]) ? $this->getData[$key] : null;
+        return isset($this->getData[$key]) ? $this->filter($this->getData[$key],$filterMode, $toClean) : null;
     }
 
     /**
@@ -244,16 +246,28 @@ class Request
      * @access public
      *
      * @param string|null $key
+     * @param string      $filterMode
+     * @param bool        $toClean
      *
-     * @return array|string|null
+     * @return array|null|string
+     * @throws RequestExceptions
      */
-    public function post($key = null)
+    public function post($key = null, $filterMode = Request::FILTER_STRING, $toClean = true)
     {
         if ($key == null) {
             return $this->postData;
         }
 
-        return isset($this->postData[$key]) ? $this->postData[$key] : null;
+        return isset($this->postData[$key]) ? $this->filter($this->postData[$key], $filterMode, $toClean) : null;
+    }
+
+    public function cookie($key = null, $filterMode = Request::FILTER_STRING, $toClean = true)
+    {
+        if ($key == null) {
+            return $this->cookieData;
+        }
+
+        return isset($this->cookieData[$key]) ? $this->filter($this->cookieData[$key], $filterMode, $toClean) : null;
     }
 
     /**
@@ -283,7 +297,7 @@ class Request
         return $this->post($tokenName) == $sessionToken;
     }
 
-    private function filter($var, $filterMode = Request::FILTER_STRING, $toClean = true)
+    private function filter($var, $filterMode = Request::FILTER_STRING, $toClean = false)
     {
         if ($toClean) {
             $var = $this->cleanString($var);
@@ -294,10 +308,8 @@ class Request
                 if (!preg_match($this->filterBag[$filterMode]['pattern'], $var)) {
                     throw new RequestExceptions($this->filterBag[$filterMode]['message']);
                 }
-            } else {
-                if (!preg_match($filterMode, $var)) {
-                    throw new RequestExceptions($this->filterBag['defaultMessage']);
-                }
+            } elseif(!preg_match($filterMode, $var)) {
+                throw new RequestExceptions($this->filterBag['defaultMessage']);
             }
         }
 

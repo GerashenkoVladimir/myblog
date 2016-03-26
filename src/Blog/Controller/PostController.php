@@ -7,6 +7,8 @@ use Framework\Controller\Controller;
 use Framework\Exception\BadTokenException;
 use Framework\Exception\DatabaseException;
 use Framework\Exception\HttpNotFoundException;
+use Framework\Exception\RequestExceptions;
+use Framework\Request\Request;
 use Framework\Response\Response;
 use Framework\Validation\Validator;
 
@@ -71,6 +73,8 @@ class PostController extends Controller
                 } else {
                     $error = $validator->getErrors();
                 }
+            } catch (RequestExceptions $e) {
+                $error = $e->getMessage();
             } catch (DatabaseException $e) {
                 $error = $e->getMessage();
             }
