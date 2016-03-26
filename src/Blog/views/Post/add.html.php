@@ -40,7 +40,7 @@ $getErrorBody = function ($field) use ($errors) {
 
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="title" placeholder="Title"
-                           value="<?php echo @$post->title ?>">
+                           value="<?php if (isset($post)) echo @$post->title ?>">
                     <?php echo $getErrorBody('title') ?>
                 </div>
             </div>
@@ -115,7 +115,7 @@ $getErrorBody = function ($field) use ($errors) {
                     </div>
 
                     <div id="editor">
-                        <?php echo htmlspecialchars_decode(@$post->content) ?>
+                        <?php if (isset($post)) echo htmlspecialchars_decode(@$post->content) ?>
                     </div>
 
                     <input type="hidden" name="content" id="post-content" value="">

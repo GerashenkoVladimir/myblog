@@ -55,7 +55,7 @@ class Sessions extends Singleton
      * @access public
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return void
      */
@@ -93,7 +93,7 @@ class Sessions extends Singleton
      */
     public function has($key)
     {
-        return isset($_SESSION[$key])?true:false;
+        return isset($_SESSION[$key]) ? true : false;
     }
 
     /**

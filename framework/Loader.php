@@ -48,9 +48,9 @@ class Loader
         $parts = explode('\\', $classname);
 
         foreach (self::$classesMap as $namespace => $dirPath) {
-            if ($namespace == $parts[0].'\\') {
+            if ($namespace == $parts[0] . '\\') {
                 array_shift($parts);
-                $filePath = $dirPath.'/'.implode('/', $parts).'.php';
+                $filePath = $dirPath . '/' . implode('/', $parts) . '.php';
                 if (file_exists($filePath)) {
                     require_once $filePath;
 
@@ -61,7 +61,7 @@ class Loader
             }
         }
 
-        $filePath = __DIR__.'/../'.lcfirst($classname).'.php';
+        $filePath = __DIR__ . '/../' . lcfirst($classname) . '.php';
         if (file_exists($filePath)) {
             require_once $filePath;
 

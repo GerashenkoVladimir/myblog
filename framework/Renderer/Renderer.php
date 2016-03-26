@@ -58,7 +58,7 @@ class Renderer
      * @access public
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return void
      */

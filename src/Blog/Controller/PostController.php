@@ -73,8 +73,6 @@ class PostController extends Controller
                 } else {
                     $error = $validator->getErrors();
                 }
-            } catch (RequestExceptions $e) {
-                $error = $e->getMessage();
             } catch (DatabaseException $e) {
                 $error = $e->getMessage();
             }

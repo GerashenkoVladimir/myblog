@@ -40,14 +40,14 @@ class ErrorHandler
                 fwrite($f, $error);
                 fclose($f);
             }
-            /*if (Service::get('config')['mode'] == 'user') {
+            if (Service::get('config')['mode'] == 'user') {
                 $renderer = new Renderer(Service::get('config')['layouts']);
                 $renderer->set('code', 500);
                 $renderer->set('message', 'Oooops');
                 $content = $renderer->generatePage('500.html');
-                $response = new Response($content,array(),500);
+                $response = new Response($content, array(), 500);
                 $response->send();
-            }*/
+            }
 
         });
     }

@@ -112,7 +112,7 @@ class User extends ActiveRecord implements UserInterface
         }
         $user = self::$database->select(self::getTable(), array('*'), array('email' => $email));
         $userObj = new self();
-        foreach ($user as $u => $value){
+        foreach ($user as $u => $value) {
             $userObj->$u = $value;
         }
 

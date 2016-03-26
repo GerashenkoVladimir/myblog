@@ -10,7 +10,7 @@ use Framework\Validation\Validator;
  * Class NotBlank
  * @package Framework\Validation\Filter
  */
-class NotBlank implements  FilterInterface
+class NotBlank implements FilterInterface
 {
 
     /**

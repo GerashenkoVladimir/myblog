@@ -42,7 +42,8 @@ abstract class Singleton
      *
      * @access protected
      */
-    protected function __construct(){
+    protected function __construct()
+    {
 
     }
 

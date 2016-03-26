@@ -9,7 +9,7 @@ use Framework\Validation\Validator;
  * Class Length
  * @package Framework\Validation\Filter
  */
-class Length implements  FilterInterface
+class Length implements FilterInterface
 {
     /**
      * Min length

@@ -24,19 +24,19 @@ class MainException extends \Exception
     public function saveExceptionLog()
     {
         $date = date('Y-m-d H:i:s (T)');
-        if(!file_exists(__DIR__ . '/../../app/logs/')){
+        if (!file_exists(__DIR__ . '/../../app/logs/')) {
             mkdir(__DIR__ . '/../../app/logs/');
         }
 
         $f = fopen(__DIR__ . '/../../app/logs/exceptionLog.txt', 'a');
         if (!empty($f)) {
-            $error  = "____________________________________________________________\n";
+            $error = "____________________________________________________________\n";
             $error .= $date . "\n";
-            $error .= 'Exception:         '.get_called_class(). "\n";
-            $error .= 'Exception message: '.$this->message . "\n";
-            $error .= 'Exception code:    '.$this->code . "\n";
-            $error .= 'File:              '.$this->file . "\n";
-            $error .= "Stack trace:\n".$this->getTraceAsString() . "\n";
+            $error .= 'Exception:         ' . get_called_class() . "\n";
+            $error .= 'Exception message: ' . $this->message . "\n";
+            $error .= 'Exception code:    ' . $this->code . "\n";
+            $error .= 'File:              ' . $this->file . "\n";
+            $error .= "Stack trace:\n" . $this->getTraceAsString() . "\n";
             $error .= "____________________________________________________________\n";
             fwrite($f, $error);
             fclose($f);
@@ -66,9 +66,9 @@ class MainException extends \Exception
         }
         $renderer = new Renderer(Service::get('config')['error_500'], true);
         foreach ($messages as $message => $m) {
-           $renderer->set($message, $m);
+            $renderer->set($message, $m);
         }
-        $content  = $renderer->generatePage();
+        $content = $renderer->generatePage();
         $response = new Response($content, array(), 500);
         $exception->saveExceptionLog();
         return $response;

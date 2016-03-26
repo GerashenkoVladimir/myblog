@@ -8,7 +8,7 @@
                     href="#">--><?php //echo $post->name ?></a>
             </p>
 
-            <?php echo htmlspecialchars_decode($post->content) ?>
+            <?php echo $post->content ?>
         </div>
 
     <?php } ?>

@@ -39,7 +39,7 @@ class Router
      */
     public function __construct()
     {
-        $this->routes   = Service::get('config')['routes'];
+        $this->routes = Service::get('config')['routes'];
     }
 
     /**
@@ -55,7 +55,7 @@ class Router
     public function generateURL($routeName)
     {
         if (isset($this->routes[$routeName]['pattern'])) {
-            return "http://".Service::get('request')->getHTTPHost().$this->routes[$routeName]['pattern'];
+            return "http://" . Service::get('request')->getHTTPHost() . $this->routes[$routeName]['pattern'];
         } else {
             return '';
         }
@@ -85,14 +85,15 @@ class Router
 
         $args = $this->getArgs($uri);
 
-        if($matchedRoutes == null){
+        if ($matchedRoutes == null) {
             return null;
         }
         $this->readyRoute = $this->filterHTTPMethods($matchedRoutes);
 
-        return array('controller' => $this->readyRoute['controller'],
-                         'action' => $this->readyRoute['action'].'Action',
-                           'args' => $args,
+        return array(
+            'controller' => $this->readyRoute['controller'],
+            'action'     => $this->readyRoute['action'] . 'Action',
+            'args'       => $args,
         );
     }
 
@@ -120,7 +121,8 @@ class Router
         $pattern = $route['pattern'];
         if (preg_match_all('|{(\w+)}|', $route['pattern'], $matches) != null) {
             foreach ($matches[1] as $match => $m) {
-                $pattern = preg_replace('|'.$matches[0][$match].'|', '('.$route['_requirements'][$m].')', $pattern);
+                $pattern = preg_replace('|' . $matches[0][$match] . '|', '(' . $route['_requirements'][$m] . ')',
+                    $pattern);
             }
         }
 
@@ -137,7 +139,7 @@ class Router
      */
     private function compareRoute($pattern, $uri)
     {
-        if (preg_match("|^".$pattern.'$|', $uri)) {
+        if (preg_match("|^" . $pattern . '$|', $uri)) {
             return true;
         }
 

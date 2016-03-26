@@ -93,16 +93,22 @@ class Request
      */
     const FILTER_INT = 'int';
 
-    Private $filterBag = array(
+    /**
+     * Contains filters modes, patterns and methods
+     *
+     * @access private
+     * @var array
+     */
+    private $filterBag = array(
         Request::FILTER_STRING => array(
             'pattern' => '/[\w@-]+$/u',
             'message' => 'Please enter the letters, numbers or symbols @ , - , _!'
-            ),
-        Request::FILTER_INT => array(
+        ),
+        Request::FILTER_INT    => array(
             'pattern' => '/^\d+$/',
             'message' => 'Please enter the numbers!'
         ),
-        'defaultMessage' => 'You have entered the wrong data'
+        'defaultMessage'       => 'You have entered the wrong data'
     );
 
     /**
@@ -125,9 +131,9 @@ class Request
         $this->requestMethod = $_SERVER['REQUEST_METHOD'];
         $this->serverProtocol = $_SERVER['SERVER_PROTOCOL'];
         $this->httpHost = $_SERVER['HTTP_HOST'];
-        $this->getData = $this->cleanData($_GET);
-        $this->postData = $this->cleanData($_POST);
-        $this->cookieData = $this->cleanData($_COOKIE);
+        $this->getData = $_GET;
+        $this->postData = $_POST;
+        $this->cookieData = $_COOKIE;
     }
 
     /**
@@ -231,13 +237,13 @@ class Request
      *
      * @return array|null|string
      */
-    public function get($key = null,  $filterMode = Request::FILTER_STRING, $toClean = true)
+    public function get($key = null, $filterMode = Request::FILTER_STRING, $toClean = true)
     {
         if ($key == null) {
             return $this->getData;
         }
 
-        return isset($this->getData[$key]) ? $this->filter($this->getData[$key],$filterMode, $toClean) : null;
+        return isset($this->getData[$key]) ? $this->filter($this->getData[$key], $filterMode, $toClean) : null;
     }
 
     /**
@@ -261,6 +267,16 @@ class Request
         return isset($this->postData[$key]) ? $this->filter($this->postData[$key], $filterMode, $toClean) : null;
     }
 
+    /**
+     * Returns data of $_COOKIE array.
+     *
+     * @param string|null $key
+     * @param string      $filterMode
+     * @param bool        $toClean
+     *
+     * @return array|null|string
+     * @throws RequestExceptions
+     */
     public function cookie($key = null, $filterMode = Request::FILTER_STRING, $toClean = true)
     {
         if ($key == null) {
@@ -297,18 +313,28 @@ class Request
         return $this->post($tokenName) == $sessionToken;
     }
 
-    private function filter($var, $filterMode = Request::FILTER_STRING, $toClean = false)
+    /**
+     * Filters data
+     *
+     * @param string     $var
+     * @param string     $filterMode Sets filter mode or use param as regular expression if mode is not exists
+     * @param bool|false $toClean    If $toClean == true, data will be cleared
+     *
+     * @return string
+     * @throws RequestExceptions
+     */
+    private function filter($var, $filterMode = Request::FILTER_STRING, $toClean = true)
     {
         if ($toClean) {
             $var = $this->cleanString($var);
         }
 
-        if (!$filterMode == Request::SKIP_FILTER) {
+        if ($filterMode != Request::SKIP_FILTER && trim($var) != null) {
             if (array_key_exists($filterMode, $this->filterBag)) {
                 if (!preg_match($this->filterBag[$filterMode]['pattern'], $var)) {
-                    throw new RequestExceptions($this->filterBag[$filterMode]['message']);
+                    throw new RequestExceptions(array($this->filterBag[$filterMode]['message']));
                 }
-            } elseif(!preg_match($filterMode, $var)) {
+            } elseif (!preg_match($filterMode, $var)) {
                 throw new RequestExceptions($this->filterBag['defaultMessage']);
             }
         }
